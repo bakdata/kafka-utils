@@ -33,6 +33,7 @@ import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.KeyValue;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.Topology;
+import org.apache.kafka.streams.kstream.GlobalKTable;
 import org.apache.kafka.streams.kstream.KStream;
 import org.apache.kafka.streams.kstream.KTable;
 import org.apache.kafka.streams.kstream.Materialized;
@@ -78,6 +79,17 @@ class TopologyInformationTest {
     }
 
     @Test
+    void shouldIgnoreTopicExtractorsForExternalSinkTopics() {
+        final StreamsBuilder streamsBuilder = new StreamsBuilder();
+        streamsBuilder.stream("input")
+                .to((key, value, recordContext) -> "topic");
+        final TopologyInformation topologyInformation =
+                new TopologyInformation(streamsBuilder.build(), "id");
+        assertThat(topologyInformation.getExternalSinkTopics())
+                .isEmpty();
+    }
+
+    @Test
     void shouldReturnAllExternalSourceTopics() {
         final TopologyInformation topologyInformation =
                 new TopologyInformation(buildComplexTopology(), "id");
@@ -95,6 +107,43 @@ class TopologyInformationTest {
                 .hasSize(1)
                 .containsExactly(THROUGH_TOPIC)
                 .doesNotContainAnyElementsOf(INPUT_TOPICS);
+    }
+
+    @Test
+    void shouldReturnAllSourceTopics() {
+        final TopologyInformation topologyInformation =
+                new TopologyInformation(buildComplexTopology(), "id");
+        assertThat(topologyInformation.getSourceTopics())
+                .hasSize(3)
+                .contains(THROUGH_TOPIC)
+                .containsAll(INPUT_TOPICS);
+    }
+
+    @Test
+    void shouldReturnAllSourcePatterns() {
+        final StreamsBuilder streamsBuilder = new StreamsBuilder();
+        final Pattern pattern = Pattern.compile(".*-topic");
+        final KStream<String, Object> stream = streamsBuilder.stream(pattern);
+        stream.to("output");
+        final TopologyInformation topologyInformation =
+                new TopologyInformation(streamsBuilder.build(), "id");
+        assertThat(topologyInformation.getSourcePatterns())
+                .hasSize(1)
+                .contains(pattern);
+    }
+
+    @Test
+    void shouldReturnGlobalStoreSourceTopics() {
+        final StreamsBuilder streamsBuilder = new StreamsBuilder();
+        final GlobalKTable<Object, Object> table = streamsBuilder.globalTable("table");
+        streamsBuilder.stream("input")
+                .join(table, (v1, v2) -> v1, (v1, v2) -> v1)
+                .to("topic");
+        final TopologyInformation topologyInformation =
+                new TopologyInformation(streamsBuilder.build(), "id");
+        assertThat(topologyInformation.getGlobalStoreSourceTopics())
+                .hasSize(1)
+                .contains("table");
     }
 
     @Test
