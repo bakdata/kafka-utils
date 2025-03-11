@@ -142,9 +142,12 @@ class TopologyInformationTest {
         final TopologyInformation topologyInformation =
                 new TopologyInformation(streamsBuilder.build(), "id");
         assertThat(topologyInformation.getSourceTopics())
+                .hasSize(2)
+                .containsExactlyInAnyOrder("input", "table");
+        assertThat(topologyInformation.getInputTopics(List.of()))
                 .hasSize(1)
-                .contains("table");
-        assertThat(topologyInformation.getInputTopics(List.of())).isEmpty();
+                .contains("input")
+                .doesNotContain("table");
     }
 
     @Test

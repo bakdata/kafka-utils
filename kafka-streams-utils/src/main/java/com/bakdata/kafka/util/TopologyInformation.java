@@ -242,6 +242,16 @@ public class TopologyInformation {
                 .map(TopologyInformation::toSubscription);
     }
 
+    private Stream<TopicSubscription> getAllGlobalStoreSubscriptions() {
+        return this.globalStores.stream()
+                .map(GlobalStore::source)
+                .map(TopologyInformation::toSubscription);
+    }
+
+    private Stream<TopicSubscription> getAllSubscriptions() {
+        return Stream.concat(this.getAllNodeSubscriptions(), this.getAllGlobalStoreSubscriptions());
+    }
+
     private Stream<Source> getAllSources() {
         return this.nodes.stream()
                 .filter(Source.class::isInstance)
@@ -319,15 +329,5 @@ public class TopologyInformation {
                 .map(subscription -> subscription.resolveTopics(allTopics))
                 .flatMap(Collection::stream)
                 .filter(this::isExternalTopic);
-    }
-
-    private Stream<TopicSubscription> getAllSubscriptions() {
-        return Stream.concat(this.getAllNodeSubscriptions(), this.getAllGlobalStoreSubscriptions());
-    }
-
-    private Stream<TopicSubscription> getAllGlobalStoreSubscriptions() {
-        return this.globalStores.stream()
-                .map(GlobalStore::source)
-                .map(TopologyInformation::toSubscription);
     }
 }
