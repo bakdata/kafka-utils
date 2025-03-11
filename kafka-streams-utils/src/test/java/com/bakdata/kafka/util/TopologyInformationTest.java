@@ -110,7 +110,7 @@ class TopologyInformationTest {
     }
 
     @Test
-    void shouldReturnAllSourceTopics() {
+    void shouldReturnAllExternalSourceTopics() {
         final TopologyInformation topologyInformation =
                 new TopologyInformation(buildComplexTopology(), "id");
         assertThat(topologyInformation.getExternalSourceTopics())
@@ -120,7 +120,7 @@ class TopologyInformationTest {
     }
 
     @Test
-    void shouldReturnAllSourcePatterns() {
+    void shouldReturnAllExternalSourcePatterns() {
         final StreamsBuilder streamsBuilder = new StreamsBuilder();
         final Pattern pattern = Pattern.compile(".*-topic");
         final KStream<String, Object> stream = streamsBuilder.stream(pattern);
