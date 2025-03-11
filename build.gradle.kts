@@ -22,7 +22,6 @@ allprojects {
 
 subprojects {
     plugins.matching { it is JavaPlugin }.all {
-        apply(plugin = "java-test-fixtures")
         apply(plugin = "io.freefair.lombok")
 
         configure<JavaPluginExtension> {
