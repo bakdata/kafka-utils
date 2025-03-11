@@ -5,9 +5,9 @@ plugins {
 }
 
 dependencies {
-    api(platform(project(":kafka-bom")))
-    api(group = "org.apache.kafka", name = "kafka-streams")
-    api(group = "org.apache.kafka", name = "kafka-clients")
+    val kafkaVersion: String by project
+    api(group = "org.apache.kafka", name = "kafka-streams", version = kafkaVersion)
+    api(group = "org.apache.kafka", name = "kafka-clients", version = kafkaVersion)
     implementation(group = "org.jooq", name = "jool", version = "0.9.15")
 
     val junitVersion: String by project
