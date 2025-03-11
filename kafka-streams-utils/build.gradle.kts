@@ -1,13 +1,13 @@
-description = "Collection of commonly used modules when writing a Kafka Application"
+description = "Collection of commonly used modules when writing a Kafka Streams Application"
 
 plugins {
     id("java-library")
 }
 
 dependencies {
-    val kafkaVersion: String by project
-    api(group = "org.apache.kafka", name = "kafka-streams", version = kafkaVersion)
-    api(group = "org.apache.kafka", name = "kafka-clients", version = kafkaVersion)
+    api(platform(project(":kafka-bom")))
+    api(group = "org.apache.kafka", name = "kafka-streams")
+    api(group = "org.apache.kafka", name = "kafka-clients")
     implementation(group = "org.jooq", name = "jool", version = "0.9.15")
 
     val junitVersion: String by project

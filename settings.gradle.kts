@@ -7,4 +7,5 @@ pluginManagement {
 rootProject.name = "kafka-utils"
 include(
     "kafka-streams-utils",
+    "kafka-bom",
 )
