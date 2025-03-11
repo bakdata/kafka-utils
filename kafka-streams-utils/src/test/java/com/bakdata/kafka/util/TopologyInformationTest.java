@@ -90,10 +90,10 @@ class TopologyInformationTest {
     }
 
     @Test
-    void shouldReturnAllExternalSourceTopics() {
+    void shouldReturnAllInputTopics() {
         final TopologyInformation topologyInformation =
                 new TopologyInformation(buildComplexTopology(), "id");
-        assertThat(topologyInformation.getExternalSourceTopics(List.of()))
+        assertThat(topologyInformation.getInputTopics(List.of()))
                 .hasSize(2)
                 .containsAll(INPUT_TOPICS)
                 .doesNotContain(THROUGH_TOPIC);
@@ -141,10 +141,10 @@ class TopologyInformationTest {
                 .to("topic");
         final TopologyInformation topologyInformation =
                 new TopologyInformation(streamsBuilder.build(), "id");
-        assertThat(topologyInformation.getGlobalStoreSourceTopics())
+        assertThat(topologyInformation.getSourceTopics())
                 .hasSize(1)
                 .contains("table");
-        assertThat(topologyInformation.getExternalSourceTopics(List.of())).isEmpty();
+        assertThat(topologyInformation.getInputTopics(List.of())).isEmpty();
     }
 
     @Test
@@ -259,10 +259,10 @@ class TopologyInformationTest {
         stream.to("output");
         final TopologyInformation topologyInformation = new TopologyInformation(streamsBuilder.build(), "id");
         assertThat(
-                topologyInformation.getExternalSourceTopics(List.of("foo", "foo-topic", "foo-topic-bar", "bar-topic")))
+                topologyInformation.getInputTopics(List.of("foo", "foo-topic", "foo-topic-bar", "bar-topic")))
                 .hasSize(2)
                 .containsExactly("foo-topic", "bar-topic");
-        assertThat(topologyInformation.getExternalSourceTopics(List.of())).isEmpty();
+        assertThat(topologyInformation.getInputTopics(List.of())).isEmpty();
     }
 
     @Test
@@ -278,7 +278,7 @@ class TopologyInformationTest {
                 .hasSize(1)
                 .containsExactly("through-topic");
         assertThat(topologyInformation.getIntermediateTopics(List.of())).isEmpty();
-        assertThat(topologyInformation.getExternalSourceTopics(
+        assertThat(topologyInformation.getInputTopics(
                 List.of("foo", "foo-topic", "foo-topic-bar", "through-topic")))
                 .hasSize(2)
                 .containsExactly("input", "foo-topic");

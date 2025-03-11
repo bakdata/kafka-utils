@@ -144,12 +144,13 @@ public class TopologyInformation {
     }
 
     /**
-     * Retrieve all source topics associated with this topology that are not auto-created by Kafka Streams
+     * Retrieve all input topics, i.e., topics that are exclusively consumed from, associated with this topology that
+     * are not auto-created by Kafka Streams
      *
      * @param allTopics list of all topics that exists in the Kafka cluster
-     * @return list of external source topics
+     * @return list of input topics
      */
-    public List<String> getExternalSourceTopics(final Collection<String> allTopics) {
+    public List<String> getInputTopics(final Collection<String> allTopics) {
         final List<String> sinks = this.getExternalSinkTopics();
         return this.getSourceTopics(allTopics)
                 .filter(t -> !sinks.contains(t))
@@ -170,6 +171,12 @@ public class TopologyInformation {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Retrieve all source topics associated with this topology that are not auto-created by Kafka Streams. This
+     * includes topics that are consumed by global stores.
+     *
+     * @return list of source topics
+     */
     public List<String> getSourceTopics() {
         return this.getAllSubscriptions()
                 .map(TopicSubscription::getTopics)
@@ -178,6 +185,11 @@ public class TopologyInformation {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Retrieve all source patterns associated with this topology that are not auto-created by Kafka Streams
+     *
+     * @return list of source patterns
+     */
     public List<Pattern> getSourcePatterns() {
         return this.getAllSubscriptions()
                 .map(TopicSubscription::getPattern)
@@ -225,17 +237,7 @@ public class TopologyInformation {
                 .collect(Collectors.toList());
     }
 
-    public Collection<String> getGlobalStoreSourceTopics() {
-        return this.globalStores.stream()
-                .map(GlobalStore::source)
-                .map(TopologyInformation::toSubscription)
-                .map(TopicSubscription::getTopics)
-                .flatMap(Collection::stream)
-                .filter(this::isExternalTopic)
-                .collect(Collectors.toList());
-    }
-
-    private Stream<TopicSubscription> getAllSubscriptions() {
+    private Stream<TopicSubscription> getAllNodeSubscriptions() {
         return this.getAllSources()
                 .map(TopologyInformation::toSubscription);
     }
@@ -313,9 +315,19 @@ public class TopologyInformation {
     }
 
     private Stream<String> getSourceTopics(final Collection<String> allTopics) {
-        return this.getAllSubscriptions()
+        return this.getAllNodeSubscriptions()
                 .map(subscription -> subscription.resolveTopics(allTopics))
                 .flatMap(Collection::stream)
                 .filter(this::isExternalTopic);
+    }
+
+    private Stream<TopicSubscription> getAllSubscriptions() {
+        return Stream.concat(this.getAllNodeSubscriptions(), this.getAllGlobalStoreSubscriptions());
+    }
+
+    private Stream<TopicSubscription> getAllGlobalStoreSubscriptions() {
+        return this.globalStores.stream()
+                .map(GlobalStore::source)
+                .map(TopologyInformation::toSubscription);
     }
 }
