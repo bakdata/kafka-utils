@@ -25,15 +25,24 @@
 package com.bakdata.kafka.util;
 
 import java.util.Collection;
+import java.util.Optional;
+import java.util.regex.Pattern;
+import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
+@Getter
 class DirectTopicSubscription implements TopicSubscription {
     private final @NonNull Collection<String> topics;
 
     @Override
     public Collection<String> resolveTopics(final Collection<String> allTopics) {
         return this.topics;
+    }
+
+    @Override
+    public Optional<Pattern> getPattern() {
+        return Optional.empty();
     }
 }

@@ -26,12 +26,16 @@ package com.bakdata.kafka.util;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.apache.kafka.streams.Topology;
 import org.apache.kafka.streams.TopologyDescription;
+import org.apache.kafka.streams.TopologyDescription.GlobalStore;
 import org.apache.kafka.streams.TopologyDescription.Node;
 import org.apache.kafka.streams.TopologyDescription.Processor;
 import org.apache.kafka.streams.TopologyDescription.Sink;
@@ -58,6 +62,7 @@ public class TopologyInformation {
     private static final Collection<String> PSEUDO_TOPIC_SUFFIXES = Set.of("-pk", "-fk", "-vh");
     private final String streamsId;
     private final Collection<Node> nodes;
+    private final Collection<GlobalStore> globalStores;
 
     /**
      * Create a new TopologyInformation of a topology and the unique app id
@@ -77,6 +82,7 @@ public class TopologyInformation {
      */
     public TopologyInformation(final TopologyDescription description, final String streamsId) {
         this.nodes = getNodes(description);
+        this.globalStores = description.globalStores();
         this.streamsId = streamsId;
     }
 
@@ -145,10 +151,7 @@ public class TopologyInformation {
      */
     public List<String> getExternalSourceTopics(final Collection<String> allTopics) {
         final List<String> sinks = this.getExternalSinkTopics();
-        return this.getAllSubscriptions()
-                .map(subscription -> subscription.resolveTopics(allTopics))
-                .flatMap(Collection::stream)
-                .filter(this::isExternalTopic)
+        return this.getSourceTopics(allTopics)
                 .filter(t -> !sinks.contains(t))
                 .collect(Collectors.toList());
     }
@@ -162,11 +165,23 @@ public class TopologyInformation {
      */
     public List<String> getIntermediateTopics(final Collection<String> allTopics) {
         final List<String> sinks = this.getExternalSinkTopics();
+        return this.getSourceTopics(allTopics)
+                .filter(sinks::contains)
+                .collect(Collectors.toList());
+    }
+
+    public List<String> getSourceTopics() {
         return this.getAllSubscriptions()
-                .map(subscription -> subscription.resolveTopics(allTopics))
+                .map(TopicSubscription::getTopics)
                 .flatMap(Collection::stream)
                 .filter(this::isExternalTopic)
-                .filter(sinks::contains)
+                .collect(Collectors.toList());
+    }
+
+    public List<Pattern> getSourcePatterns() {
+        return this.getAllSubscriptions()
+                .map(TopicSubscription::getPattern)
+                .flatMap(Optional::stream)
                 .collect(Collectors.toList());
     }
 
@@ -210,6 +225,16 @@ public class TopologyInformation {
                 .collect(Collectors.toList());
     }
 
+    public Collection<String> getGlobalStoreSourceTopics() {
+        return this.globalStores.stream()
+                .map(GlobalStore::source)
+                .map(TopologyInformation::toSubscription)
+                .map(TopicSubscription::getTopics)
+                .flatMap(Collection::stream)
+                .filter(this::isExternalTopic)
+                .collect(Collectors.toList());
+    }
+
     private Stream<TopicSubscription> getAllSubscriptions() {
         return this.getAllSources()
                 .map(TopologyInformation::toSubscription);
@@ -223,7 +248,8 @@ public class TopologyInformation {
 
     private Stream<String> getAllTopics() {
         return this.getAllSinks()
-                .map(Sink::topic);
+                .map(Sink::topic)
+                .filter(Objects::nonNull);
     }
 
     private Stream<Sink> getAllSinks() {
@@ -284,5 +310,12 @@ public class TopologyInformation {
                 // one sink node, and one source node
                 .filter(processor -> processor.name().endsWith(REPARTITION_SUFFIX + FILTER_SUFFIX))
                 .map(TopologyInformation::getRepartitionName);
+    }
+
+    private Stream<String> getSourceTopics(final Collection<String> allTopics) {
+        return this.getAllSubscriptions()
+                .map(subscription -> subscription.resolveTopics(allTopics))
+                .flatMap(Collection::stream)
+                .filter(this::isExternalTopic);
     }
 }
