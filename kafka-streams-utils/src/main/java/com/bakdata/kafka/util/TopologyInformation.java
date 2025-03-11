@@ -152,7 +152,7 @@ public class TopologyInformation {
      */
     public List<String> getInputTopics(final Collection<String> allTopics) {
         final List<String> sinks = this.getExternalSinkTopics();
-        return this.getSourceTopics(allTopics)
+        return this.getExternalSourceTopics(allTopics)
                 .filter(t -> !sinks.contains(t))
                 .collect(Collectors.toList());
     }
@@ -166,7 +166,7 @@ public class TopologyInformation {
      */
     public List<String> getIntermediateTopics(final Collection<String> allTopics) {
         final List<String> sinks = this.getExternalSinkTopics();
-        return this.getSourceTopics(allTopics)
+        return this.getExternalSourceTopics(allTopics)
                 .filter(sinks::contains)
                 .collect(Collectors.toList());
     }
@@ -177,7 +177,7 @@ public class TopologyInformation {
      *
      * @return list of source topics
      */
-    public List<String> getSourceTopics() {
+    public List<String> getExternalSourceTopics() {
         return this.getAllSubscriptions()
                 .map(TopicSubscription::getTopics)
                 .flatMap(Collection::stream)
@@ -190,7 +190,7 @@ public class TopologyInformation {
      *
      * @return list of source patterns
      */
-    public List<Pattern> getSourcePatterns() {
+    public List<Pattern> getExternalSourcePatterns() {
         return this.getAllSubscriptions()
                 .map(TopicSubscription::getPattern)
                 .flatMap(Optional::stream)
@@ -324,7 +324,7 @@ public class TopologyInformation {
                 .map(TopologyInformation::getRepartitionName);
     }
 
-    private Stream<String> getSourceTopics(final Collection<String> allTopics) {
+    private Stream<String> getExternalSourceTopics(final Collection<String> allTopics) {
         return this.getAllNodeSubscriptions()
                 .map(subscription -> subscription.resolveTopics(allTopics))
                 .flatMap(Collection::stream)

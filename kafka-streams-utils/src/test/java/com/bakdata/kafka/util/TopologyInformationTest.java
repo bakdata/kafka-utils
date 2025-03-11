@@ -113,7 +113,7 @@ class TopologyInformationTest {
     void shouldReturnAllSourceTopics() {
         final TopologyInformation topologyInformation =
                 new TopologyInformation(buildComplexTopology(), "id");
-        assertThat(topologyInformation.getSourceTopics())
+        assertThat(topologyInformation.getExternalSourceTopics())
                 .hasSize(3)
                 .contains(THROUGH_TOPIC)
                 .containsAll(INPUT_TOPICS);
@@ -127,7 +127,7 @@ class TopologyInformationTest {
         stream.to("output");
         final TopologyInformation topologyInformation =
                 new TopologyInformation(streamsBuilder.build(), "id");
-        assertThat(topologyInformation.getSourcePatterns())
+        assertThat(topologyInformation.getExternalSourcePatterns())
                 .hasSize(1)
                 .contains(pattern);
     }
@@ -141,7 +141,7 @@ class TopologyInformationTest {
                 .to("topic");
         final TopologyInformation topologyInformation =
                 new TopologyInformation(streamsBuilder.build(), "id");
-        assertThat(topologyInformation.getSourceTopics())
+        assertThat(topologyInformation.getExternalSourceTopics())
                 .hasSize(2)
                 .containsExactlyInAnyOrder("input", "table");
         assertThat(topologyInformation.getInputTopics(List.of()))
