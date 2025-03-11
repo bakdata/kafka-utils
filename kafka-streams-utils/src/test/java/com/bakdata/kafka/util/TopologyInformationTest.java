@@ -144,6 +144,7 @@ class TopologyInformationTest {
         assertThat(topologyInformation.getGlobalStoreSourceTopics())
                 .hasSize(1)
                 .contains("table");
+        assertThat(topologyInformation.getExternalSourceTopics(List.of())).isEmpty();
     }
 
     @Test
