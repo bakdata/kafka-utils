@@ -138,7 +138,7 @@ public class TopologyInformation {
      * @return list of external sink topics
      */
     public List<String> getExternalSinkTopics() {
-        return this.getAllTopics()
+        return this.getSinkTopics()
                 .filter(this::isExternalTopic)
                 .collect(Collectors.toList());
     }
@@ -237,28 +237,27 @@ public class TopologyInformation {
                 .collect(Collectors.toList());
     }
 
-    private Stream<TopicSubscription> getAllNodeSubscriptions() {
+    private Stream<TopicSubscription> getAllSubscriptions() {
         return this.getAllSources()
                 .map(TopologyInformation::toSubscription);
     }
 
-    private Stream<TopicSubscription> getAllGlobalStoreSubscriptions() {
-        return this.globalStores.stream()
-                .map(GlobalStore::source)
-                .map(TopologyInformation::toSubscription);
-    }
-
-    private Stream<TopicSubscription> getAllSubscriptions() {
-        return Stream.concat(this.getAllNodeSubscriptions(), this.getAllGlobalStoreSubscriptions());
-    }
-
     private Stream<Source> getAllSources() {
+        return Stream.concat(this.getAllNodeSources(), this.getAllGlobalStoreSources());
+    }
+
+    private Stream<Source> getAllGlobalStoreSources() {
+        return this.globalStores.stream()
+                .map(GlobalStore::source);
+    }
+
+    private Stream<Source> getAllNodeSources() {
         return this.nodes.stream()
                 .filter(Source.class::isInstance)
                 .map(Source.class::cast);
     }
 
-    private Stream<String> getAllTopics() {
+    private Stream<String> getSinkTopics() {
         return this.getAllSinks()
                 .map(Sink::topic)
                 .filter(Objects::nonNull);
@@ -305,7 +304,7 @@ public class TopologyInformation {
     }
 
     private Stream<String> getInternalSinks() {
-        return this.getAllTopics()
+        return this.getSinkTopics()
                 .filter(this::isInternalTopic)
                 .flatMap(topic -> Seq.of(topic).concat(createPseudoTopics(topic)))
                 .map(topic -> String.format("%s-%s", this.streamsId, topic));
@@ -325,7 +324,8 @@ public class TopologyInformation {
     }
 
     private Stream<String> getExternalSourceTopics(final Collection<String> allTopics) {
-        return this.getAllNodeSubscriptions()
+        return this.getAllNodeSources()
+                .map(TopologyInformation::toSubscription)
                 .map(subscription -> subscription.resolveTopics(allTopics))
                 .flatMap(Collection::stream)
                 .filter(this::isExternalTopic);
