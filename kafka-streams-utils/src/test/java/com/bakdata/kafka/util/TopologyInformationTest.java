@@ -33,6 +33,7 @@ import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.KeyValue;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.Topology;
+import org.apache.kafka.streams.kstream.GlobalKTable;
 import org.apache.kafka.streams.kstream.KStream;
 import org.apache.kafka.streams.kstream.KTable;
 import org.apache.kafka.streams.kstream.Materialized;
@@ -78,10 +79,21 @@ class TopologyInformationTest {
     }
 
     @Test
-    void shouldReturnAllExternalSourceTopics() {
+    void shouldIgnoreTopicExtractorsForExternalSinkTopics() {
+        final StreamsBuilder streamsBuilder = new StreamsBuilder();
+        streamsBuilder.stream("input")
+                .to((key, value, recordContext) -> "topic");
+        final TopologyInformation topologyInformation =
+                new TopologyInformation(streamsBuilder.build(), "id");
+        assertThat(topologyInformation.getExternalSinkTopics())
+                .isEmpty();
+    }
+
+    @Test
+    void shouldReturnAllInputTopics() {
         final TopologyInformation topologyInformation =
                 new TopologyInformation(buildComplexTopology(), "id");
-        assertThat(topologyInformation.getExternalSourceTopics(List.of()))
+        assertThat(topologyInformation.getInputTopics(List.of()))
                 .hasSize(2)
                 .containsAll(INPUT_TOPICS)
                 .doesNotContain(THROUGH_TOPIC);
@@ -95,6 +107,47 @@ class TopologyInformationTest {
                 .hasSize(1)
                 .containsExactly(THROUGH_TOPIC)
                 .doesNotContainAnyElementsOf(INPUT_TOPICS);
+    }
+
+    @Test
+    void shouldReturnAllExternalSourceTopics() {
+        final TopologyInformation topologyInformation =
+                new TopologyInformation(buildComplexTopology(), "id");
+        assertThat(topologyInformation.getExternalSourceTopics())
+                .hasSize(3)
+                .contains(THROUGH_TOPIC)
+                .containsAll(INPUT_TOPICS);
+    }
+
+    @Test
+    void shouldReturnAllExternalSourcePatterns() {
+        final StreamsBuilder streamsBuilder = new StreamsBuilder();
+        final Pattern pattern = Pattern.compile(".*-topic");
+        final KStream<String, Object> stream = streamsBuilder.stream(pattern);
+        stream.to("output");
+        final TopologyInformation topologyInformation =
+                new TopologyInformation(streamsBuilder.build(), "id");
+        assertThat(topologyInformation.getExternalSourcePatterns())
+                .hasSize(1)
+                .contains(pattern);
+    }
+
+    @Test
+    void shouldReturnGlobalStoreSourceTopics() {
+        final StreamsBuilder streamsBuilder = new StreamsBuilder();
+        final GlobalKTable<Object, Object> table = streamsBuilder.globalTable("table");
+        streamsBuilder.stream("input")
+                .join(table, (v1, v2) -> v1, (v1, v2) -> v1)
+                .to("topic");
+        final TopologyInformation topologyInformation =
+                new TopologyInformation(streamsBuilder.build(), "id");
+        assertThat(topologyInformation.getExternalSourceTopics())
+                .hasSize(2)
+                .containsExactlyInAnyOrder("input", "table");
+        assertThat(topologyInformation.getInputTopics(List.of()))
+                .hasSize(1)
+                .contains("input")
+                .doesNotContain("table");
     }
 
     @Test
@@ -209,10 +262,10 @@ class TopologyInformationTest {
         stream.to("output");
         final TopologyInformation topologyInformation = new TopologyInformation(streamsBuilder.build(), "id");
         assertThat(
-                topologyInformation.getExternalSourceTopics(List.of("foo", "foo-topic", "foo-topic-bar", "bar-topic")))
+                topologyInformation.getInputTopics(List.of("foo", "foo-topic", "foo-topic-bar", "bar-topic")))
                 .hasSize(2)
                 .containsExactly("foo-topic", "bar-topic");
-        assertThat(topologyInformation.getExternalSourceTopics(List.of())).isEmpty();
+        assertThat(topologyInformation.getInputTopics(List.of())).isEmpty();
     }
 
     @Test
@@ -228,7 +281,7 @@ class TopologyInformationTest {
                 .hasSize(1)
                 .containsExactly("through-topic");
         assertThat(topologyInformation.getIntermediateTopics(List.of())).isEmpty();
-        assertThat(topologyInformation.getExternalSourceTopics(
+        assertThat(topologyInformation.getInputTopics(
                 List.of("foo", "foo-topic", "foo-topic-bar", "through-topic")))
                 .hasSize(2)
                 .containsExactly("input", "foo-topic");
