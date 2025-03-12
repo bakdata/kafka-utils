@@ -144,8 +144,8 @@ public class TopologyInformation {
     }
 
     /**
-     * Retrieve all input topics, i.e., topics that are exclusively consumed from, associated with this topology that
-     * are not auto-created by Kafka Streams
+     * Retrieve all input topics, i.e., topics that are only consumed from, associated with this topology that are
+     * not auto-created by Kafka Streams
      *
      * @param allTopics list of all topics that exists in the Kafka cluster
      * @return list of input topics
