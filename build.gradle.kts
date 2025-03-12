@@ -40,7 +40,3 @@ subprojects {
         }
     }
 }
-
-tasks.named("sonar") {
-    enabled = false //TODO: enable sonar
-}
