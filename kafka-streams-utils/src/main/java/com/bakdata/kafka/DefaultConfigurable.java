@@ -29,6 +29,7 @@ import java.util.Map;
 class DefaultConfigurable<T> implements Configurable<T> {
     @Override
     public T configure(final Map<String, Object> config, final boolean isKey) {
+        // null denotes default serde in Kafka Streams
         return null;
     }
 }
