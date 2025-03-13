@@ -6,14 +6,16 @@
 # kafka-utils
 Utilities for working with Kafka
 
-These include
+## Kafka Streams Utils
+
+Utilities for working with Kafka Streams applications. This library provides:
 
 - `TopologyInformation` to parse Kafka Streams `TopologyDescription` and extract sinks and sources
 - Helpers to automatically configure Serdes for Kafka Streams applications
 
-## Getting Started
+They are mainly used in [streams-bootstrap](https://github.com/bakdata/streams-bootstrap) and [fluent-kafka-streams-tests](https://github.com/bakdata/fluent-kafka-streams-tests), but you are free to use them in your own projects if needed.
 
-### Serde
+### Getting Started
 
 You can add kafka-streams-utils via Maven Central.
 
@@ -26,7 +28,6 @@ implementation group: 'com.bakdata.kafka', name: 'kafka-streams-utils', version:
 #### Maven
 
 ```xml
-
 <dependency>
     <groupId>com.bakdata.kafka</groupId>
     <artifactId>kafka-streams-utils</artifactId>
@@ -36,6 +37,67 @@ implementation group: 'com.bakdata.kafka', name: 'kafka-streams-utils', version:
 
 For other build tools or versions, refer to
 the [latest version in MvnRepository](https://mvnrepository.com/artifact/com.bakdata.kafka/kafka-streams-utils/latest).
+
+## Kafka BOM
+
+BOM is short for Bill of Materials.
+It is a Maven feature that allows you to manage the versions of dependencies in a single place.
+This project provides a BOM for Kafka dependencies, i.e., Kafka core dependencies in group `org.apache.kafka` as well as Confluent dependencies in group `io.confluent`.
+
+### Getting Started
+
+You can add kafka-bom via Maven Central.
+
+#### Gradle
+
+```gradle
+implementation(platform('com.bakdata.kafka:kafka-bom:1.0.0'))
+```
+
+#### Maven
+
+```xml
+<dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>com.bakdata.kafka</groupId>
+            <artifactId>kafka-bom</artifactId>
+            <version>1.0.0</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>
+    </dependencies>
+</dependencyManagement>
+```
+
+For other build tools or versions, refer to
+the [latest version in MvnRepository](https://mvnrepository.com/artifact/com.bakdata.kafka/kafka-bom/latest).
+
+### Usage
+
+After adding the BOM to your project, you can use the provided dependencies without specifying a version.
+
+#### Gradle
+
+```gradle
+implementation group: 'org.apache.kafka' name: 'kafka-streams'
+implementation group: 'io.confluent' name: 'kafka-streams-avro-serde'
+```
+
+#### Maven
+
+```xml
+<dependencies>
+    <dependency>
+        <groupId>org.apache.kafka</groupId>
+        <artifactId>kafka-streams</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>io.confluent</groupId>
+        <artifactId>kafka-streams-avro-serde</artifactId>
+    </dependency>
+</dependencies>
+```
 
 ## Development
 
