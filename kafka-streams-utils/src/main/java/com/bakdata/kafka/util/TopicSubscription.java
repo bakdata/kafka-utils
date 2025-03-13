@@ -25,11 +25,12 @@
 package com.bakdata.kafka.util;
 
 import java.util.Collection;
+import java.util.Optional;
+import java.util.regex.Pattern;
 
 /**
  * Interface to represent different types of subscribing to topics.
  */
-@FunctionalInterface
 interface TopicSubscription {
 
     /**
@@ -39,4 +40,8 @@ interface TopicSubscription {
      * @return topics subscribed to
      */
     Collection<String> resolveTopics(Collection<String> allTopics);
+
+    Collection<String> getTopics();
+
+    Optional<Pattern> getPattern();
 }

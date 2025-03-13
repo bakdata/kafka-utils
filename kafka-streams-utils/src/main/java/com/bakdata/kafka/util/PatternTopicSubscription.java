@@ -24,7 +24,10 @@
 
 package com.bakdata.kafka.util;
 
+import static java.util.Collections.emptyList;
+
 import java.util.Collection;
+import java.util.Optional;
 import java.util.regex.Pattern;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -39,5 +42,15 @@ class PatternTopicSubscription implements TopicSubscription {
         return Seq.seq(allTopics)
                 .filter(this.pattern.asMatchPredicate())
                 .toList();
+    }
+
+    @Override
+    public Collection<String> getTopics() {
+        return emptyList();
+    }
+
+    @Override
+    public Optional<Pattern> getPattern() {
+        return Optional.of(this.pattern);
     }
 }

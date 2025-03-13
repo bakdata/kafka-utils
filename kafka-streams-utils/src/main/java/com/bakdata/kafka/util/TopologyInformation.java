@@ -26,12 +26,16 @@ package com.bakdata.kafka.util;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.apache.kafka.streams.Topology;
 import org.apache.kafka.streams.TopologyDescription;
+import org.apache.kafka.streams.TopologyDescription.GlobalStore;
 import org.apache.kafka.streams.TopologyDescription.Node;
 import org.apache.kafka.streams.TopologyDescription.Processor;
 import org.apache.kafka.streams.TopologyDescription.Sink;
@@ -58,6 +62,7 @@ public class TopologyInformation {
     private static final Collection<String> PSEUDO_TOPIC_SUFFIXES = Set.of("-pk", "-fk", "-vh");
     private final String streamsId;
     private final Collection<Node> nodes;
+    private final Collection<GlobalStore> globalStores;
 
     /**
      * Create a new TopologyInformation of a topology and the unique app id
@@ -77,6 +82,7 @@ public class TopologyInformation {
      */
     public TopologyInformation(final TopologyDescription description, final String streamsId) {
         this.nodes = getNodes(description);
+        this.globalStores = description.globalStores();
         this.streamsId = streamsId;
     }
 
@@ -132,23 +138,21 @@ public class TopologyInformation {
      * @return list of external sink topics
      */
     public List<String> getExternalSinkTopics() {
-        return this.getAllTopics()
+        return this.getSinkTopics()
                 .filter(this::isExternalTopic)
                 .collect(Collectors.toList());
     }
 
     /**
-     * Retrieve all source topics associated with this topology that are not auto-created by Kafka Streams
+     * Retrieve all input topics, i.e., topics that are only consumed from, associated with this topology that are
+     * not auto-created by Kafka Streams
      *
      * @param allTopics list of all topics that exists in the Kafka cluster
-     * @return list of external source topics
+     * @return list of input topics
      */
-    public List<String> getExternalSourceTopics(final Collection<String> allTopics) {
+    public List<String> getInputTopics(final Collection<String> allTopics) {
         final List<String> sinks = this.getExternalSinkTopics();
-        return this.getAllSubscriptions()
-                .map(subscription -> subscription.resolveTopics(allTopics))
-                .flatMap(Collection::stream)
-                .filter(this::isExternalTopic)
+        return this.getExternalNodeSourceTopics(allTopics)
                 .filter(t -> !sinks.contains(t))
                 .collect(Collectors.toList());
     }
@@ -162,11 +166,34 @@ public class TopologyInformation {
      */
     public List<String> getIntermediateTopics(final Collection<String> allTopics) {
         final List<String> sinks = this.getExternalSinkTopics();
+        return this.getExternalNodeSourceTopics(allTopics)
+                .filter(sinks::contains)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Retrieve all source topics associated with this topology that are not auto-created by Kafka Streams. This
+     * includes topics that are consumed by global stores.
+     *
+     * @return list of source topics
+     */
+    public List<String> getExternalSourceTopics() {
         return this.getAllSubscriptions()
-                .map(subscription -> subscription.resolveTopics(allTopics))
+                .map(TopicSubscription::getTopics)
                 .flatMap(Collection::stream)
                 .filter(this::isExternalTopic)
-                .filter(sinks::contains)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Retrieve all source patterns associated with this topology that are not auto-created by Kafka Streams
+     *
+     * @return list of source patterns
+     */
+    public List<Pattern> getExternalSourcePatterns() {
+        return this.getAllSubscriptions()
+                .map(TopicSubscription::getPattern)
+                .flatMap(Optional::stream)
                 .collect(Collectors.toList());
     }
 
@@ -216,14 +243,24 @@ public class TopologyInformation {
     }
 
     private Stream<Source> getAllSources() {
+        return Stream.concat(this.getAllNodeSources(), this.getAllGlobalStoreSources());
+    }
+
+    private Stream<Source> getAllGlobalStoreSources() {
+        return this.globalStores.stream()
+                .map(GlobalStore::source);
+    }
+
+    private Stream<Source> getAllNodeSources() {
         return this.nodes.stream()
                 .filter(Source.class::isInstance)
                 .map(Source.class::cast);
     }
 
-    private Stream<String> getAllTopics() {
+    private Stream<String> getSinkTopics() {
         return this.getAllSinks()
-                .map(Sink::topic);
+                .map(Sink::topic)
+                .filter(Objects::nonNull);
     }
 
     private Stream<Sink> getAllSinks() {
@@ -267,7 +304,7 @@ public class TopologyInformation {
     }
 
     private Stream<String> getInternalSinks() {
-        return this.getAllTopics()
+        return this.getSinkTopics()
                 .filter(this::isInternalTopic)
                 .flatMap(topic -> Seq.of(topic).concat(createPseudoTopics(topic)))
                 .map(topic -> String.format("%s-%s", this.streamsId, topic));
@@ -284,5 +321,13 @@ public class TopologyInformation {
                 // one sink node, and one source node
                 .filter(processor -> processor.name().endsWith(REPARTITION_SUFFIX + FILTER_SUFFIX))
                 .map(TopologyInformation::getRepartitionName);
+    }
+
+    private Stream<String> getExternalNodeSourceTopics(final Collection<String> allTopics) {
+        return this.getAllNodeSources()
+                .map(TopologyInformation::toSubscription)
+                .map(subscription -> subscription.resolveTopics(allTopics))
+                .flatMap(Collection::stream)
+                .filter(this::isExternalTopic);
     }
 }
