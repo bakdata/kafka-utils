@@ -42,7 +42,7 @@ the [latest version in MvnRepository](https://mvnrepository.com/artifact/com.bak
 
 BOM is short for Bill of Materials.
 It is a Maven feature that allows you to manage the versions of dependencies in a single place.
-This project provides BOM for Kafka dependencies, i.e., Kafka core dependencies in group `org.apache.kafka` as well as Confluent dependencies in group `io.confluent`.
+This project provides BOMs for Kafka dependencies, i.e., Kafka core dependencies in group `org.apache.kafka` as well as Confluent dependencies in group `io.confluent`.
 
 ### Getting Started
 
