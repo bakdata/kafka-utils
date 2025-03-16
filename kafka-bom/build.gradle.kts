@@ -4,24 +4,20 @@ plugins {
     id("java-platform")
 }
 
-javaPlatform {
-    allowDependencies()
-}
-
 dependencies {
     constraints {
         val kafkaVersion: String by project
-        api(group = "org.apache.kafka", name = "kafka-clients", version = kafkaVersion)
-        api(group = "org.apache.kafka", name = "kafka_2.13", version = kafkaVersion)
-        api(group = "org.apache.kafka", name = "kafka-server", version = kafkaVersion)
-        api(group = "org.apache.kafka", name = "kafka-server-common", version = kafkaVersion)
-        api(group = "org.apache.kafka", name = "kafka-streams", version = kafkaVersion)
-        api(group = "org.apache.kafka", name = "kafka-streams-test-utils", version = kafkaVersion)
-        api(group = "org.apache.kafka", name = "kafka-tools", version = kafkaVersion)
-        api(group = "org.apache.kafka", name = "connect-api", version = kafkaVersion)
-        api(group = "org.apache.kafka", name = "connect-transforms", version = kafkaVersion)
-        api(group = "org.apache.kafka", name = "connect-runtime", version = kafkaVersion)
-        api(group = "org.apache.kafka", name = "connect-json", version = kafkaVersion)
-        api(group = "org.apache.kafka", name = "connect-file", version = kafkaVersion)
+        api("org.apache.kafka:kafka-clients:$kafkaVersion")
+        api("org.apache.kafka:kafka_2.13:$kafkaVersion")
+        api("org.apache.kafka:kafka-server:$kafkaVersion")
+        api("org.apache.kafka:kafka-server-common:$kafkaVersion")
+        api("org.apache.kafka:kafka-streams:$kafkaVersion")
+        api("org.apache.kafka:kafka-streams-test-utils:$kafkaVersion")
+        api("org.apache.kafka:kafka-tools:$kafkaVersion")
+        api("org.apache.kafka:connect-api:$kafkaVersion")
+        api("org.apache.kafka:connect-transforms:$kafkaVersion")
+        api("org.apache.kafka:connect-runtime:$kafkaVersion")
+        api("org.apache.kafka:connect-json:$kafkaVersion")
+        api("org.apache.kafka:connect-file:$kafkaVersion")
     }
 }
