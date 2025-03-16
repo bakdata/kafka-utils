@@ -31,28 +31,27 @@ implementation group: 'com.bakdata.kafka', name: 'kafka-streams-utils', version:
 <dependency>
     <groupId>com.bakdata.kafka</groupId>
     <artifactId>kafka-streams-utils</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
 </dependency>
 ```
 
 For other build tools or versions, refer to
 the [latest version in MvnRepository](https://mvnrepository.com/artifact/com.bakdata.kafka/kafka-streams-utils/latest).
 
-## Kafka and Confluent BOM
+## Kafka BOM
 
 BOM is short for Bill of Materials.
 It is a Maven feature that allows you to manage the versions of dependencies in a single place.
-This project provides BOMs for Kafka dependencies, i.e., Kafka core dependencies in group `org.apache.kafka` as well as Confluent dependencies in group `io.confluent`.
+This project provides a BOM for Kafka dependencies, i.e., Kafka core dependencies in group `org.apache.kafka` as well as Confluent dependencies in group `io.confluent`.
 
 ### Getting Started
 
-You can add Kafka/Confluent BOM via Maven Central.
+You can add kafka-bom via Maven Central.
 
 #### Gradle
 
 ```gradle
-implementation(platform('com.bakdata.kafka:kafka-bom:1.1.0'))
-implementation(platform('com.bakdata.kafka:confluent-bom:1.1.0'))
+implementation(platform('com.bakdata.kafka:kafka-bom:1.0.0'))
 ```
 
 #### Maven
@@ -63,16 +62,7 @@ implementation(platform('com.bakdata.kafka:confluent-bom:1.1.0'))
         <dependency>
             <groupId>com.bakdata.kafka</groupId>
             <artifactId>kafka-bom</artifactId>
-            <version>1.1.0</version>
-            <type>pom</type>
-            <scope>import</scope>
-        </dependency>
-    </dependencies>
-    <dependencies>
-        <dependency>
-            <groupId>com.bakdata.kafka</groupId>
-            <artifactId>confluent-bom</artifactId>
-            <version>1.1.0</version>
+            <version>1.0.1</version>
             <type>pom</type>
             <scope>import</scope>
         </dependency>
