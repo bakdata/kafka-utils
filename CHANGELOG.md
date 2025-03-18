@@ -1,8 +1,15 @@
 # Change Log
 
-## [1.0.0](https://github.com/bakdata/kafka-utils/tree/1.0.0) (2025-03-13)
-[View commits](https://github.com/bakdata/kafka-utils/compare/1.0.0...1.0.0)
+## [1.0.1](https://github.com/bakdata/kafka-utils/tree/1.0.1) (2025-03-18)
+[View commits](https://github.com/bakdata/kafka-utils/compare/1.0.1...1.0.1)
 
+
+## [1.0.1](https://github.com/bakdata/kafka-utils/tree/1.0.1) (2025-03-18)
+[View commits](https://github.com/bakdata/kafka-utils/compare/1.0.0...1.0.1)
+
+**Merged pull requests:**
+
+- Fix BOM constraints [\#5](https://github.com/bakdata/kafka-utils/pull/5) ([@philipp94831](https://github.com/philipp94831))
 
 ## [1.0.0](https://github.com/bakdata/kafka-utils/tree/1.0.0) (2025-03-13)
 [View commits](https://github.com/bakdata/kafka-utils/compare/03cb6863ced884f152de99215747ebe0f161c2e0...1.0.0)
