@@ -31,7 +31,7 @@ implementation group: 'com.bakdata.kafka', name: 'kafka-streams-utils', version:
 <dependency>
     <groupId>com.bakdata.kafka</groupId>
     <artifactId>kafka-streams-utils</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
 </dependency>
 ```
 
@@ -62,7 +62,7 @@ implementation(platform('com.bakdata.kafka:kafka-bom:1.0.0'))
         <dependency>
             <groupId>com.bakdata.kafka</groupId>
             <artifactId>kafka-bom</artifactId>
-            <version>1.0.0</version>
+            <version>1.0.1</version>
             <type>pom</type>
             <scope>import</scope>
         </dependency>

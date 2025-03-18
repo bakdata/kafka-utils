@@ -4,38 +4,34 @@ plugins {
     id("java-platform")
 }
 
-javaPlatform {
-    allowDependencies()
-}
-
 dependencies {
     constraints {
         val kafkaVersion: String by project
-        api(group = "org.apache.kafka", name = "kafka-clients", version = kafkaVersion)
-        api(group = "org.apache.kafka", name = "kafka_2.13", version = kafkaVersion)
-        api(group = "org.apache.kafka", name = "kafka-server", version = kafkaVersion)
-        api(group = "org.apache.kafka", name = "kafka-server-common", version = kafkaVersion)
-        api(group = "org.apache.kafka", name = "kafka-streams", version = kafkaVersion)
-        api(group = "org.apache.kafka", name = "kafka-streams-test-utils", version = kafkaVersion)
-        api(group = "org.apache.kafka", name = "kafka-tools", version = kafkaVersion)
-        api(group = "org.apache.kafka", name = "connect-api", version = kafkaVersion)
-        api(group = "org.apache.kafka", name = "connect-transforms", version = kafkaVersion)
-        api(group = "org.apache.kafka", name = "connect-runtime", version = kafkaVersion)
-        api(group = "org.apache.kafka", name = "connect-json", version = kafkaVersion)
-        api(group = "org.apache.kafka", name = "connect-file", version = kafkaVersion)
+        api("org.apache.kafka:kafka-clients:$kafkaVersion")
+        api("org.apache.kafka:kafka_2.13:$kafkaVersion")
+        api("org.apache.kafka:kafka-server:$kafkaVersion")
+        api("org.apache.kafka:kafka-server-common:$kafkaVersion")
+        api("org.apache.kafka:kafka-streams:$kafkaVersion")
+        api("org.apache.kafka:kafka-streams-test-utils:$kafkaVersion")
+        api("org.apache.kafka:kafka-tools:$kafkaVersion")
+        api("org.apache.kafka:connect-api:$kafkaVersion")
+        api("org.apache.kafka:connect-transforms:$kafkaVersion")
+        api("org.apache.kafka:connect-runtime:$kafkaVersion")
+        api("org.apache.kafka:connect-json:$kafkaVersion")
+        api("org.apache.kafka:connect-file:$kafkaVersion")
         val confluentVersion: String by project
-        api(group = "io.confluent", name = "kafka-schema-serializer", version = confluentVersion)
-        api(group = "io.confluent", name = "kafka-schema-registry-client", version = confluentVersion)
-        api(group = "io.confluent", name = "kafka-avro-serializer", version = confluentVersion)
-        api(group = "io.confluent", name = "kafka-protobuf-serializer", version = confluentVersion)
-        api(group = "io.confluent", name = "kafka-protobuf-provider", version = confluentVersion)
-        api(group = "io.confluent", name = "kafka-json-schema-serializer", version = confluentVersion)
-        api(group = "io.confluent", name = "kafka-json-schema-provider", version = confluentVersion)
-        api(group = "io.confluent", name = "kafka-streams-avro-serde", version = confluentVersion)
-        api(group = "io.confluent", name = "kafka-streams-protobuf-serde", version = confluentVersion)
-        api(group = "io.confluent", name = "kafka-streams-json-schema-serde", version = confluentVersion)
-        api(group = "io.confluent", name = "kafka-connect-avro-converter", version = confluentVersion)
-        api(group = "io.confluent", name = "kafka-connect-protobuf-converter", version = confluentVersion)
-        api(group = "io.confluent", name = "kafka-connect-json-schema-converter", version = confluentVersion)
+        api("io.confluent:kafka-schema-serializer:$confluentVersion")
+        api("io.confluent:kafka-schema-registry-client:$confluentVersion")
+        api("io.confluent:kafka-avro-serializer:$confluentVersion")
+        api("io.confluent:kafka-protobuf-serializer:$confluentVersion")
+        api("io.confluent:kafka-protobuf-provider:$confluentVersion")
+        api("io.confluent:kafka-json-schema-serializer:$confluentVersion")
+        api("io.confluent:kafka-json-schema-provider:$confluentVersion")
+        api("io.confluent:kafka-streams-avro-serde:$confluentVersion")
+        api("io.confluent:kafka-streams-protobuf-serde:$confluentVersion")
+        api("io.confluent:kafka-streams-json-schema-serde:$confluentVersion")
+        api("io.confluent:kafka-connect-avro-converter:$confluentVersion")
+        api("io.confluent:kafka-connect-protobuf-converter:$confluentVersion")
+        api("io.confluent:kafka-connect-json-schema-converter:$confluentVersion")
     }
 }
