@@ -1,8 +1,15 @@
 # Change Log
 
-## [1.0.1](https://github.com/bakdata/kafka-utils/tree/1.0.1) (2025-03-18)
-[View commits](https://github.com/bakdata/kafka-utils/compare/1.0.1...1.0.1)
+## [1.1.0](https://github.com/bakdata/kafka-utils/tree/1.1.0) (2025-03-19)
+[View commits](https://github.com/bakdata/kafka-utils/compare/1.1.0...1.1.0)
 
+
+## [1.1.0](https://github.com/bakdata/kafka-utils/tree/1.1.0) (2025-03-19)
+[View commits](https://github.com/bakdata/kafka-utils/compare/1.0.1...1.1.0)
+
+**Merged pull requests:**
+
+- Upgrade to Kafka 3.9 [\#4](https://github.com/bakdata/kafka-utils/pull/4) ([@philipp94831](https://github.com/philipp94831))
 
 ## [1.0.1](https://github.com/bakdata/kafka-utils/tree/1.0.1) (2025-03-18)
 [View commits](https://github.com/bakdata/kafka-utils/compare/1.0.0...1.0.1)
