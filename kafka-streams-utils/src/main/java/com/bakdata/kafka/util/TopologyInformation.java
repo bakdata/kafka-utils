@@ -57,7 +57,8 @@ public class TopologyInformation {
     private static final String FILTER_SUFFIX = "-filter";
     /**
      * See
-     * {@link org.apache.kafka.streams.kstream.internals.KTableImpl#doJoinOnForeignKey(KTable, Function, ValueJoiner, TableJoined, Materialized, boolean)}
+     * {@link org.apache.kafka.streams.kstream.internals.KTableImpl#doJoinOnForeignKey(KTable, Function, ValueJoiner,
+     * TableJoined, Materialized, boolean)}
      */
     private static final Collection<String> PSEUDO_TOPIC_SUFFIXES = Set.of("-pk", "-fk", "-vh");
     private final String streamsId;
@@ -138,14 +139,13 @@ public class TopologyInformation {
      * @return list of external sink topics
      */
     public List<String> getExternalSinkTopics() {
-        return this.getSinkTopics()
-                .filter(this::isExternalTopic)
+        return this.getExternalSinkTopicsStream()
                 .collect(Collectors.toList());
     }
 
     /**
-     * Retrieve all input topics, i.e., topics that are only consumed from, associated with this topology that are
-     * not auto-created by Kafka Streams
+     * Retrieve all input topics, i.e., topics that are only consumed from, associated with this topology that are not
+     * auto-created by Kafka Streams
      *
      * @param allTopics list of all topics that exists in the Kafka cluster
      * @return list of input topics
@@ -168,6 +168,21 @@ public class TopologyInformation {
         final List<String> sinks = this.getExternalSinkTopics();
         return this.getExternalNodeSourceTopics(allTopics)
                 .filter(sinks::contains)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Retrieve all output topics, i.e., topics that are only produced to, associated with this topology that are not
+     * auto-created by Kafka Streams
+     *
+     * @param allTopics list of all topics that exists in the Kafka cluster
+     * @return list of output topics
+     */
+    public List<String> getOutputTopics(final Collection<String> allTopics) {
+        final List<String> sources = this.getExternalNodeSourceTopics(allTopics)
+                .collect(Collectors.toList());
+        return this.getExternalSinkTopicsStream()
+                .filter(t -> !sources.contains(t))
                 .collect(Collectors.toList());
     }
 
@@ -328,6 +343,11 @@ public class TopologyInformation {
                 .map(TopologyInformation::toSubscription)
                 .map(subscription -> subscription.resolveTopics(allTopics))
                 .flatMap(Collection::stream)
+                .filter(this::isExternalTopic);
+    }
+
+    private Stream<String> getExternalSinkTopicsStream() {
+        return this.getSinkTopics()
                 .filter(this::isExternalTopic);
     }
 }
