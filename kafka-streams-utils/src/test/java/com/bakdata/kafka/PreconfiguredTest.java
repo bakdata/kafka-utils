@@ -84,7 +84,20 @@ class PreconfiguredTest {
 
     @ParameterizedTest
     @MethodSource("generatePreconfigured")
-    void shouldLogReconfigurationMixed(final Preconfigured<?> preconfigured) {
+    void shouldLogReconfigurationMixedValuesFirst(final Preconfigured<?> preconfigured) {
+        try (final LogCaptor logCaptor = LogCaptor.forClass(LoggingConfigurable.class)) {
+            preconfigured.configureForValues(emptyMap());
+            assertThat(logCaptor.getWarnLogs()).isEmpty();
+            preconfigured.configureForKeys(emptyMap());
+            assertThat(logCaptor.getWarnLogs())
+                    .hasSize(1)
+                    .contains(RECONFIGURATION_MESSAGE);
+        }
+    }
+
+    @ParameterizedTest
+    @MethodSource("generatePreconfigured")
+    void shouldLogReconfigurationMixedKeysFirst(final Preconfigured<?> preconfigured) {
         try (final LogCaptor logCaptor = LogCaptor.forClass(LoggingConfigurable.class)) {
             preconfigured.configureForKeys(emptyMap());
             assertThat(logCaptor.getWarnLogs()).isEmpty();
