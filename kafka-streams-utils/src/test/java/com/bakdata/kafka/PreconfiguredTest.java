@@ -24,6 +24,7 @@
 
 package com.bakdata.kafka;
 
+import static com.bakdata.kafka.LoggingConfigurable.RECONFIGURATION_MESSAGE;
 import static java.util.Collections.emptyMap;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -37,9 +38,6 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 class PreconfiguredTest {
-
-    private static final String RECONFIGURATION_LOG =
-            "Configurable has already been configured. Configuring twice may lead to unintended side effects.";
 
     static Stream<Arguments> generatePreconfigured() {
         return Stream.of(
@@ -67,7 +65,7 @@ class PreconfiguredTest {
             preconfigured.configureForValues(emptyMap());
             assertThat(logCaptor.getWarnLogs())
                     .hasSize(1)
-                    .contains(RECONFIGURATION_LOG);
+                    .contains(RECONFIGURATION_MESSAGE);
         }
     }
 
@@ -80,7 +78,7 @@ class PreconfiguredTest {
             preconfigured.configureForKeys(emptyMap());
             assertThat(logCaptor.getWarnLogs())
                     .hasSize(1)
-                    .contains(RECONFIGURATION_LOG);
+                    .contains(RECONFIGURATION_MESSAGE);
         }
     }
 
@@ -93,7 +91,7 @@ class PreconfiguredTest {
             preconfigured.configureForValues(emptyMap());
             assertThat(logCaptor.getWarnLogs())
                     .hasSize(1)
-                    .contains(RECONFIGURATION_LOG);
+                    .contains(RECONFIGURATION_MESSAGE);
         }
     }
 
