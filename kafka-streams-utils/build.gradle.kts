@@ -9,6 +9,7 @@ dependencies {
     api(group = "org.apache.kafka", name = "kafka-streams")
     api(group = "org.apache.kafka", name = "kafka-clients")
     implementation(group = "org.jooq", name = "jool", version = "0.9.15")
+    implementation(group = "org.slf4j", name = "slf4j-api", version = "2.0.17")
 
     val junitVersion: String by project
     testRuntimeOnly(group = "org.junit.jupiter", name = "junit-jupiter-engine", version = junitVersion)

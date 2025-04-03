@@ -116,14 +116,14 @@ public final class Preconfigured<T> {
         return new Preconfigured<>(configurable(serializer), configOverrides);
     }
 
-    private static <S extends Serde<T>, T> ConfigurableSerde<S, T> configurable(final S serde) {
+    private static <S extends Serde<T>, T> Configurable<S> configurable(final S serde) {
         Objects.requireNonNull(serde, "Use Preconfigured#defaultSerde instead");
-        return new ConfigurableSerde<>(serde);
+        return new LoggingConfigurable<>(new ConfigurableSerde<>(serde));
     }
 
-    private static <S extends Serializer<T>, T> ConfigurableSerializer<S, T> configurable(final S serializer) {
+    private static <S extends Serializer<T>, T> Configurable<S> configurable(final S serializer) {
         Objects.requireNonNull(serializer, "Use Preconfigured#defaultSerializer instead");
-        return new ConfigurableSerializer<>(serializer);
+        return new LoggingConfigurable<>(new ConfigurableSerializer<>(serializer));
     }
 
     /**
