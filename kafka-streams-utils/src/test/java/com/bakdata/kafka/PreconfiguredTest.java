@@ -53,6 +53,11 @@ class PreconfiguredTest {
         assertThat(Preconfigured.defaultSerde().configureForValues(emptyMap())).isNull();
     }
 
+    @Test
+    void shouldCreateDefaultSerializer() {
+        assertThat(Preconfigured.defaultSerializer().configureForValues(emptyMap())).isNull();
+    }
+
     @ParameterizedTest
     @MethodSource("generatePreconfigured")
     void shouldLogReconfigurationForValues(final Preconfigured<?> preconfigured) {
@@ -90,11 +95,6 @@ class PreconfiguredTest {
                     .hasSize(1)
                     .contains(RECONFIGURATION_LOG);
         }
-    }
-
-    @Test
-    void shouldCreateDefaultSerializer() {
-        assertThat(Preconfigured.defaultSerializer().configureForValues(emptyMap())).isNull();
     }
 
 }
