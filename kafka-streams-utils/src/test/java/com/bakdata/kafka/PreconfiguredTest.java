@@ -27,13 +27,69 @@ package com.bakdata.kafka;
 import static java.util.Collections.emptyMap;
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.stream.Stream;
+import nl.altindag.log.LogCaptor;
+import org.apache.kafka.common.serialization.Serdes;
+import org.apache.kafka.common.serialization.StringSerializer;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 class PreconfiguredTest {
+
+    private static final String RECONFIGURATION_LOG =
+            "Configurable has already been configured. Configuring twice may lead to unintended side effects.";
+
+    static Stream<Arguments> generatePreconfigured() {
+        return Stream.of(
+                Arguments.of(Preconfigured.create(Serdes.String())),
+                Arguments.of(Preconfigured.create(new StringSerializer()))
+        );
+    }
 
     @Test
     void shouldCreateDefaultSerde() {
         assertThat(Preconfigured.defaultSerde().configureForValues(emptyMap())).isNull();
+    }
+
+    @ParameterizedTest
+    @MethodSource("generatePreconfigured")
+    void shouldLogReconfigurationForValues(final Preconfigured<?> preconfigured) {
+        try (final LogCaptor logCaptor = LogCaptor.forClass(LoggingConfigurable.class)) {
+            preconfigured.configureForValues(emptyMap());
+            assertThat(logCaptor.getWarnLogs()).isEmpty();
+            preconfigured.configureForValues(emptyMap());
+            assertThat(logCaptor.getWarnLogs())
+                    .hasSize(1)
+                    .contains(RECONFIGURATION_LOG);
+        }
+    }
+
+    @ParameterizedTest
+    @MethodSource("generatePreconfigured")
+    void shouldLogReconfigurationForKeys(final Preconfigured<?> preconfigured) {
+        try (final LogCaptor logCaptor = LogCaptor.forClass(LoggingConfigurable.class)) {
+            preconfigured.configureForKeys(emptyMap());
+            assertThat(logCaptor.getWarnLogs()).isEmpty();
+            preconfigured.configureForKeys(emptyMap());
+            assertThat(logCaptor.getWarnLogs())
+                    .hasSize(1)
+                    .contains(RECONFIGURATION_LOG);
+        }
+    }
+
+    @ParameterizedTest
+    @MethodSource("generatePreconfigured")
+    void shouldLogReconfigurationMixed(final Preconfigured<?> preconfigured) {
+        try (final LogCaptor logCaptor = LogCaptor.forClass(LoggingConfigurable.class)) {
+            preconfigured.configureForKeys(emptyMap());
+            assertThat(logCaptor.getWarnLogs()).isEmpty();
+            preconfigured.configureForValues(emptyMap());
+            assertThat(logCaptor.getWarnLogs())
+                    .hasSize(1)
+                    .contains(RECONFIGURATION_LOG);
+        }
     }
 
     @Test

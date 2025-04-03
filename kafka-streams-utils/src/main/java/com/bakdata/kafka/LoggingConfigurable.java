@@ -15,8 +15,9 @@ class LoggingConfigurable<T> implements Configurable<T> {
     @Override
     public T configure(final Map<String, Object> config, final boolean isKey) {
         if (this.configured) {
-            log.warn(
-                    "Configurable has already been configured. Configuring twice may lead to unintended side effects.");
+            log.warn("Configurable has already been configured."
+                    + " Configuring twice may lead to unintended side effects."
+                    + " This might throw an exception in the future.");
         }
         this.configured = true;
         return this.wrapped.configure(config, isKey);
