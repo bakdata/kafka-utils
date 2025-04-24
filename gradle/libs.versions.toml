@@ -38,7 +38,7 @@ junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter", version.r
 assertj = { group = "org.assertj", name = "assertj-core", version = "3.27.3" }
 mockito-core = { group = "org.mockito", name = "mockito-core", version.ref = "mockito" }
 mockito-junit = { group = "org.mockito", name = "mockito-junit-jupiter", version.ref = "mockito" }
-logcaptor = { group = "io.github.hakky54", name = "logcaptor", version = "2.10.1" }
+logcaptor = { group = "io.github.hakky54", name = "logcaptor", version = "2.11.0" }
 
 [plugins]
 release = { id = "com.bakdata.release", version = "1.9.1" }
