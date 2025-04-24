@@ -6,19 +6,18 @@ plugins {
 
 dependencies {
     constraints {
-        val kafkaVersion: String by project
-        api("org.apache.kafka:kafka-clients:$kafkaVersion")
-        api("org.apache.kafka:kafka_2.13:$kafkaVersion")
-        api("org.apache.kafka:kafka-server:$kafkaVersion")
-        api("org.apache.kafka:kafka-server-common:$kafkaVersion")
-        api("org.apache.kafka:kafka-streams:$kafkaVersion")
-        api("org.apache.kafka:kafka-streams-test-utils:$kafkaVersion")
-        api("org.apache.kafka:kafka-tools:$kafkaVersion")
-        api("org.apache.kafka:connect-api:$kafkaVersion")
-        api("org.apache.kafka:connect-transforms:$kafkaVersion")
-        api("org.apache.kafka:connect-runtime:$kafkaVersion")
-        api("org.apache.kafka:connect-json:$kafkaVersion")
-        api("org.apache.kafka:connect-file:$kafkaVersion")
+        api(libs.kafka.clients)
+        api(libs.kafka.core)
+        api(libs.kafka.server)
+        api(libs.kafka.server.common)
+        api(libs.kafka.streams)
+        api(libs.kafka.streams.test.utils)
+        api(libs.kafka.tools)
+        api(libs.kafka.connect.api)
+        api(libs.kafka.connect.transforms)
+        api(libs.kafka.connect.runtime)
+        api(libs.kafka.connect.json)
+        api(libs.kafka.connect.file)
         val confluentVersion: String by project
         api("io.confluent:kafka-schema-serializer:$confluentVersion")
         api("io.confluent:kafka-schema-registry-client:$confluentVersion")
