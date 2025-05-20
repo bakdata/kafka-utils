@@ -38,6 +38,7 @@ import org.apache.kafka.common.serialization.Serializer;
 
 /**
  * A pre-configured {@link Serde} or {@link Serializer}, i.e., configs and isKey are set.
+ *
  * @param <T> type of underlying configurable
  */
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
@@ -52,8 +53,9 @@ public final class Preconfigured<T> {
     /**
      * Create a pre-configured {@code Serde} that returns {@code null} when calling
      * {@link Preconfigured#configureForKeys(Map)} and {@link Preconfigured#configureForValues(Map)}
-     * @return pre-configured serde
+     *
      * @param <T> type (de-)serialized by the {@code Serde}
+     * @return pre-configured serde
      */
     public static <T> Preconfigured<Serde<T>> defaultSerde() {
         return new Preconfigured<>(new DefaultConfigurable<>());
@@ -61,10 +63,11 @@ public final class Preconfigured<T> {
 
     /**
      * Pre-configure a {@code Serde}
+     *
      * @param serde {@code Serde} to pre-configure
-     * @return pre-configured serde
      * @param <S> type of {@link Serde}
      * @param <T> type (de-)serialized by the {@code Serde}
+     * @return pre-configured serde
      */
     public static <S extends Serde<T>, T> Preconfigured<S> create(final S serde) {
         return new Preconfigured<>(configurable(serde));
@@ -72,11 +75,12 @@ public final class Preconfigured<T> {
 
     /**
      * Pre-configure a {@code Serde} with config overrides
+     *
      * @param serde {@code Serde} to pre-configure
      * @param configOverrides configs passed to {@link Serde#configure(Map, boolean)}
-     * @return pre-configured serde
      * @param <S> type of {@link Serde}
      * @param <T> type (de-)serialized by the {@code Serde}
+     * @return pre-configured serde
      */
     public static <S extends Serde<T>, T> Preconfigured<S> create(final S serde,
             final Map<String, Object> configOverrides) {
@@ -86,8 +90,9 @@ public final class Preconfigured<T> {
     /**
      * Create a pre-configured {@code Serializer} that returns {@code null} when calling
      * {@link Preconfigured#configureForKeys(Map)} and {@link Preconfigured#configureForValues(Map)}
-     * @return pre-configured serializer
+     *
      * @param <T> type serialized by the {@code Serializer}
+     * @return pre-configured serializer
      */
     public static <T> Preconfigured<Serializer<T>> defaultSerializer() {
         return new Preconfigured<>(new DefaultConfigurable<>());
@@ -95,10 +100,11 @@ public final class Preconfigured<T> {
 
     /**
      * Pre-configure a {@code Serializer}
+     *
      * @param serializer {@code Serializer} to pre-configure
-     * @return pre-configured serializer
      * @param <S> type of {@link Serializer}
      * @param <T> type serialized by the {@code Serializer}
+     * @return pre-configured serializer
      */
     public static <S extends Serializer<T>, T> Preconfigured<S> create(final S serializer) {
         return new Preconfigured<>(configurable(serializer));
@@ -106,11 +112,12 @@ public final class Preconfigured<T> {
 
     /**
      * Pre-configure a {@code Serializer}
+     *
      * @param serializer {@code Serializer} to pre-configure
      * @param configOverrides configs passed to {@link Serializer#configure(Map, boolean)}
-     * @return pre-configured serializer
      * @param <S> type of {@link Serializer}
      * @param <T> type serialized by the {@code Serializer}
+     * @return pre-configured serializer
      */
     public static <S extends Serializer<T>, T> Preconfigured<S> create(final S serializer,
             final Map<String, Object> configOverrides) {
@@ -154,50 +161,6 @@ public final class Preconfigured<T> {
         return new Preconfigured<>(configurable(deserializer), configOverrides);
     }
 
-    private static <S extends Serde<T>, T> Configurable<S> configurable(final S serde) {
-        Objects.requireNonNull(serde, "Use Preconfigured#defaultSerde instead");
-        return new LoggingConfigurable<>(new ConfigurableSerde<>(serde));
-    }
-
-    private static <S extends Serializer<T>, T> Configurable<S> configurable(final S serializer) {
-        Objects.requireNonNull(serializer, "Use Preconfigured#defaultSerializer instead");
-        return new LoggingConfigurable<>(new ConfigurableSerializer<>(serializer));
-    }
-
-    private static <S extends Deserializer<T>, T> Configurable<S> configurable(final S deserializer) {
-        Objects.requireNonNull(deserializer, "Use Preconfigured#defaultDeserializer instead");
-        return new LoggingConfigurable<>(new ConfigurableDeserializer<>(deserializer));
-    }
-
-    /**
-     * Configure for values using a base config
-     * @param baseConfig Base config. {@link #configOverrides} override properties of base config.
-     * @return configured instance
-     */
-    public T configureForValues(final Map<String, Object> baseConfig) {
-        return this.configure(baseConfig, false);
-    }
-
-    /**
-     * Configure for keys using a base config
-     * @param baseConfig Base config. {@link #configOverrides} override properties of base config.
-     * @return configured instance
-     */
-    public T configureForKeys(final Map<String, Object> baseConfig) {
-        return this.configure(baseConfig, true);
-    }
-
-    private T configure(final Map<String, Object> baseConfig, final boolean isKey) {
-        final Map<String, Object> serializerConfig = this.mergeConfig(baseConfig);
-        return this.configurable.configure(serializerConfig, isKey);
-    }
-
-    private Map<String, Object> mergeConfig(final Map<String, Object> baseConfig) {
-        final Map<String, Object> config = new HashMap<>(baseConfig);
-        config.putAll(this.configOverrides);
-        return config;
-    }
-
     /**
      * Convert a pre-configured {@link Serde} to a pre-configured {@link Deserializer}
      *
@@ -225,6 +188,52 @@ public final class Preconfigured<T> {
             final Serde<T> serde = preconfigured.configurable.configure(config, isKey);
             return serde.serializer();
         });
+    }
+
+    private static <S extends Serde<T>, T> Configurable<S> configurable(final S serde) {
+        Objects.requireNonNull(serde, "Use Preconfigured#defaultSerde instead");
+        return new LoggingConfigurable<>(new ConfigurableSerde<>(serde));
+    }
+
+    private static <S extends Serializer<T>, T> Configurable<S> configurable(final S serializer) {
+        Objects.requireNonNull(serializer, "Use Preconfigured#defaultSerializer instead");
+        return new LoggingConfigurable<>(new ConfigurableSerializer<>(serializer));
+    }
+
+    private static <S extends Deserializer<T>, T> Configurable<S> configurable(final S deserializer) {
+        Objects.requireNonNull(deserializer, "Use Preconfigured#defaultDeserializer instead");
+        return new LoggingConfigurable<>(new ConfigurableDeserializer<>(deserializer));
+    }
+
+    /**
+     * Configure for values using a base config
+     *
+     * @param baseConfig Base config. {@link #configOverrides} override properties of base config.
+     * @return configured instance
+     */
+    public T configureForValues(final Map<String, Object> baseConfig) {
+        return this.configure(baseConfig, false);
+    }
+
+    /**
+     * Configure for keys using a base config
+     *
+     * @param baseConfig Base config. {@link #configOverrides} override properties of base config.
+     * @return configured instance
+     */
+    public T configureForKeys(final Map<String, Object> baseConfig) {
+        return this.configure(baseConfig, true);
+    }
+
+    private T configure(final Map<String, Object> baseConfig, final boolean isKey) {
+        final Map<String, Object> serializerConfig = this.mergeConfig(baseConfig);
+        return this.configurable.configure(serializerConfig, isKey);
+    }
+
+    private Map<String, Object> mergeConfig(final Map<String, Object> baseConfig) {
+        final Map<String, Object> config = new HashMap<>(baseConfig);
+        config.putAll(this.configOverrides);
+        return config;
     }
 
 }
