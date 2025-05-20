@@ -27,6 +27,7 @@ package com.bakdata.kafka;
 import static org.mockito.Mockito.verify;
 
 import java.util.Map;
+import org.apache.kafka.common.serialization.Deserializer;
 import org.apache.kafka.common.serialization.Serde;
 import org.apache.kafka.common.serialization.Serializer;
 import org.assertj.core.api.SoftAssertions;
@@ -50,6 +51,8 @@ class ConfiguratorTest {
     private Serde<String> serde;
     @Mock
     private Serializer<String> serializer;
+    @Mock
+    private Deserializer<String> deserializer;
 
     @Test
     void shouldConfigureValueSerde() {
@@ -165,6 +168,66 @@ class ConfiguratorTest {
                 "prop3", "value3"
         ))).isEqualTo(this.serializer);
         verify(this.serializer).configure(Map.of(
+                "prop1", "value1",
+                "prop2", "overridden",
+                "prop3", "value3"
+        ), true);
+    }
+
+    @Test
+    void shouldConfigureValueDeserializer() {
+        final Configurator configurator = new Configurator(Map.of(
+                "prop1", "value1",
+                "prop2", "value2"
+        ));
+        this.softly.assertThat(configurator.configureForValues(this.deserializer)).isEqualTo(this.deserializer);
+        verify(this.deserializer).configure(Map.of(
+                "prop1", "value1",
+                "prop2", "value2"
+        ), false);
+    }
+
+    @Test
+    void shouldConfigureValueDeserializerWithConfig() {
+        final Configurator configurator = new Configurator(Map.of(
+                "prop1", "value1",
+                "prop2", "value2"
+        ));
+        this.softly.assertThat(configurator.configureForValues(this.deserializer, Map.of(
+                "prop2", "overridden",
+                "prop3", "value3"
+        ))).isEqualTo(this.deserializer);
+        verify(this.deserializer).configure(Map.of(
+                "prop1", "value1",
+                "prop2", "overridden",
+                "prop3", "value3"
+        ), false);
+    }
+
+    @Test
+    void shouldConfigureKeyDeserializer() {
+        final Configurator configurator = new Configurator(Map.of(
+                "prop1", "value1",
+                "prop2", "value2"
+        ));
+        this.softly.assertThat(configurator.configureForKeys(this.deserializer)).isEqualTo(this.deserializer);
+        verify(this.deserializer).configure(Map.of(
+                "prop1", "value1",
+                "prop2", "value2"
+        ), true);
+    }
+
+    @Test
+    void shouldConfigureKeyDeserializerWithConfig() {
+        final Configurator configurator = new Configurator(Map.of(
+                "prop1", "value1",
+                "prop2", "value2"
+        ));
+        this.softly.assertThat(configurator.configureForKeys(this.deserializer, Map.of(
+                "prop2", "overridden",
+                "prop3", "value3"
+        ))).isEqualTo(this.deserializer);
+        verify(this.deserializer).configure(Map.of(
                 "prop1", "value1",
                 "prop2", "overridden",
                 "prop3", "value3"

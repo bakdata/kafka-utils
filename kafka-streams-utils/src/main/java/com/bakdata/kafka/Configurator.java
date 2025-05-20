@@ -29,6 +29,7 @@ import static com.bakdata.kafka.Preconfigured.create;
 import java.util.Map;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.apache.kafka.common.serialization.Deserializer;
 import org.apache.kafka.common.serialization.Serde;
 import org.apache.kafka.common.serialization.Serializer;
 
@@ -86,7 +87,7 @@ public class Configurator {
      * Configure a {@code Serializer} for values using {@link #kafkaProperties}
      * @param serializer serializer to configure
      * @return configured {@code Serializer}
-     * @param <T> type to be (de-)serialized
+     * @param <T> type to be serialized
      */
     public <T> Serializer<T> configureForValues(final Serializer<T> serializer) {
         return this.configureForValues(create(serializer));
@@ -97,7 +98,7 @@ public class Configurator {
      * @param serializer serializer to configure
      * @param configOverrides configuration overrides
      * @return configured {@code Serializer}
-     * @param <T> type to be (de-)serialized
+     * @param <T> type to be serialized
      */
     public <T> Serializer<T> configureForValues(final Serializer<T> serializer,
             final Map<String, Object> configOverrides) {
@@ -108,7 +109,7 @@ public class Configurator {
      * Configure a {@code Serializer} for keys using {@link #kafkaProperties}
      * @param serializer serializer to configure
      * @return configured {@code Serializer}
-     * @param <T> type to be (de-)serialized
+     * @param <T> type to be serialized
      */
     public <T> Serializer<T> configureForKeys(final Serializer<T> serializer) {
         return this.configureForKeys(create(serializer));
@@ -119,11 +120,59 @@ public class Configurator {
      * @param serializer serializer to configure
      * @param configOverrides configuration overrides
      * @return configured {@code Serializer}
-     * @param <T> type to be (de-)serialized
+     * @param <T> type to be serialized
      */
     public <T> Serializer<T> configureForKeys(final Serializer<T> serializer,
             final Map<String, Object> configOverrides) {
         return this.configureForKeys(create(serializer, configOverrides));
+    }
+
+    /**
+     * Configure a {@code Deserializer} for values using {@link #kafkaProperties}
+     *
+     * @param deserializer deserializer to configure
+     * @param <T> type to be deserialized
+     * @return configured {@code Deserializer}
+     */
+    public <T> Deserializer<T> configureForValues(final Deserializer<T> deserializer) {
+        return this.configureForValues(create(deserializer));
+    }
+
+    /**
+     * Configure a {@code Deserializer} for values using {@link #kafkaProperties} and config overrides
+     *
+     * @param deserializer deserializer to configure
+     * @param configOverrides configuration overrides
+     * @param <T> type to be deserialized
+     * @return configured {@code Deserializer}
+     */
+    public <T> Deserializer<T> configureForValues(final Deserializer<T> deserializer,
+            final Map<String, Object> configOverrides) {
+        return this.configureForValues(create(deserializer, configOverrides));
+    }
+
+    /**
+     * Configure a {@code Deserializer} for keys using {@link #kafkaProperties}
+     *
+     * @param deserializer deserializer to configure
+     * @param <T> type to be deserialized
+     * @return configured {@code Deserializer}
+     */
+    public <T> Deserializer<T> configureForKeys(final Deserializer<T> deserializer) {
+        return this.configureForKeys(create(deserializer));
+    }
+
+    /**
+     * Configure a {@code Deserializer} for keys using {@link #kafkaProperties} and config overrides
+     *
+     * @param deserializer deserializer to configure
+     * @param configOverrides configuration overrides
+     * @param <T> type to be deserialized
+     * @return configured {@code Deserializer}
+     */
+    public <T> Deserializer<T> configureForKeys(final Deserializer<T> deserializer,
+            final Map<String, Object> configOverrides) {
+        return this.configureForKeys(create(deserializer, configOverrides));
     }
 
     /**

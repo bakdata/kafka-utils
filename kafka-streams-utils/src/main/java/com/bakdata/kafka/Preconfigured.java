@@ -32,6 +32,7 @@ import java.util.Objects;
 import lombok.AccessLevel;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.apache.kafka.common.serialization.Deserializer;
 import org.apache.kafka.common.serialization.Serde;
 import org.apache.kafka.common.serialization.Serializer;
 
@@ -86,7 +87,7 @@ public final class Preconfigured<T> {
      * Create a pre-configured {@code Serializer} that returns {@code null} when calling
      * {@link Preconfigured#configureForKeys(Map)} and {@link Preconfigured#configureForValues(Map)}
      * @return pre-configured serializer
-     * @param <T> type (de-)serialized by the {@code Serializer}
+     * @param <T> type serialized by the {@code Serializer}
      */
     public static <T> Preconfigured<Serializer<T>> defaultSerializer() {
         return new Preconfigured<>(new DefaultConfigurable<>());
@@ -116,6 +117,43 @@ public final class Preconfigured<T> {
         return new Preconfigured<>(configurable(serializer), configOverrides);
     }
 
+    /**
+     * Create a pre-configured {@code Deserializer} that returns {@code null} when calling
+     * {@link Preconfigured#configureForKeys(Map)} and {@link Preconfigured#configureForValues(Map)}
+     *
+     * @param <T> type deserialized by the {@code Deserializer}
+     * @return pre-configured deserializer
+     */
+    public static <T> Preconfigured<Deserializer<T>> defaultDeserializer() {
+        return new Preconfigured<>(new DefaultConfigurable<>());
+    }
+
+    /**
+     * Pre-configure a {@code Deserializer}
+     *
+     * @param deserializer {@code Deserializer} to pre-configure
+     * @param <S> type of {@link Deserializer}
+     * @param <T> type deserialized by the {@code Deserializer}
+     * @return pre-configured deserializer
+     */
+    public static <S extends Deserializer<T>, T> Preconfigured<S> create(final S deserializer) {
+        return new Preconfigured<>(configurable(deserializer));
+    }
+
+    /**
+     * Pre-configure a {@code Deserializer}
+     *
+     * @param deserializer {@code Deserializer} to pre-configure
+     * @param configOverrides configs passed to {@link Deserializer#configure(Map, boolean)}
+     * @param <S> type of {@link Deserializer}
+     * @param <T> type deserialized by the {@code Deserializer}
+     * @return pre-configured deserializer
+     */
+    public static <S extends Deserializer<T>, T> Preconfigured<S> create(final S deserializer,
+            final Map<String, Object> configOverrides) {
+        return new Preconfigured<>(configurable(deserializer), configOverrides);
+    }
+
     private static <S extends Serde<T>, T> Configurable<S> configurable(final S serde) {
         Objects.requireNonNull(serde, "Use Preconfigured#defaultSerde instead");
         return new LoggingConfigurable<>(new ConfigurableSerde<>(serde));
@@ -124,6 +162,11 @@ public final class Preconfigured<T> {
     private static <S extends Serializer<T>, T> Configurable<S> configurable(final S serializer) {
         Objects.requireNonNull(serializer, "Use Preconfigured#defaultSerializer instead");
         return new LoggingConfigurable<>(new ConfigurableSerializer<>(serializer));
+    }
+
+    private static <S extends Deserializer<T>, T> Configurable<S> configurable(final S deserializer) {
+        Objects.requireNonNull(deserializer, "Use Preconfigured#defaultDeserializer instead");
+        return new LoggingConfigurable<>(new ConfigurableDeserializer<>(deserializer));
     }
 
     /**

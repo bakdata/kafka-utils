@@ -31,6 +31,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.util.stream.Stream;
 import nl.altindag.log.LogCaptor;
 import org.apache.kafka.common.serialization.Serdes;
+import org.apache.kafka.common.serialization.StringDeserializer;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -42,7 +43,8 @@ class PreconfiguredTest {
     static Stream<Arguments> generatePreconfigured() {
         return Stream.of(
                 Arguments.of(Preconfigured.create(Serdes.String())),
-                Arguments.of(Preconfigured.create(new StringSerializer()))
+                Arguments.of(Preconfigured.create(new StringSerializer())),
+                Arguments.of(Preconfigured.create(new StringDeserializer()))
         );
     }
 
@@ -54,6 +56,11 @@ class PreconfiguredTest {
     @Test
     void shouldCreateDefaultSerializer() {
         assertThat(Preconfigured.defaultSerializer().configureForValues(emptyMap())).isNull();
+    }
+
+    @Test
+    void shouldCreateDefaultDeserializer() {
+        assertThat(Preconfigured.defaultDeserializer().configureForValues(emptyMap())).isNull();
     }
 
     @ParameterizedTest
