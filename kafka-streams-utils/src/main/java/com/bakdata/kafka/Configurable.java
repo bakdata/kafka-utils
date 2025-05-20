@@ -27,7 +27,7 @@ package com.bakdata.kafka;
 import java.util.Map;
 
 @FunctionalInterface
-public interface Configurable<T> {
+interface Configurable<T> {
     /**
      * Configure this class
      * @param config configs in key/value pairs

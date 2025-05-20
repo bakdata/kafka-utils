@@ -29,6 +29,7 @@ import static java.util.Collections.emptyMap;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import lombok.AccessLevel;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.apache.kafka.common.serialization.Deserializer;
@@ -39,17 +40,12 @@ import org.apache.kafka.common.serialization.Serializer;
  * A pre-configured {@link Serde} or {@link Serializer}, i.e., configs and isKey are set.
  * @param <T> type of underlying configurable
  */
-@RequiredArgsConstructor
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Preconfigured<T> {
     private final @NonNull Configurable<T> configurable;
     private final @NonNull Map<String, Object> configOverrides;
 
-    /**
-     * Create a new instance of {@code Preconfigured} with the given {@code Configurable} and no config overrides.
-     *
-     * @param configurable configurable to pre-configure
-     */
-    public Preconfigured(final Configurable<T> configurable) {
+    private Preconfigured(final Configurable<T> configurable) {
         this(configurable, emptyMap());
     }
 
@@ -200,6 +196,35 @@ public final class Preconfigured<T> {
         final Map<String, Object> config = new HashMap<>(baseConfig);
         config.putAll(this.configOverrides);
         return config;
+    }
+
+    /**
+     * Convert a pre-configured {@link Serde} to a pre-configured {@link Deserializer}
+     *
+     * @param preconfigured pre-configured {@link Serde}
+     * @param <T> type (de-)serialized by the {@link Serde}
+     * @return pre-configured {@link Deserializer} of the {@link Serde}
+     */
+    public static <T> Preconfigured<Deserializer<T>> asDeserializer(
+            final Preconfigured<? extends Serde<T>> preconfigured) {
+        return new Preconfigured<>((config, isKey) -> {
+            final Serde<T> serde = preconfigured.configurable.configure(config, isKey);
+            return serde.deserializer();
+        });
+    }
+
+    /**
+     * Convert a pre-configured {@link Serde} to a pre-configured {@link Serializer}
+     *
+     * @param preconfigured pre-configured {@link Serde}
+     * @param <T> type (de-)serialized by the {@link Serde}
+     * @return pre-configured {@link Serializer} of the {@link Serde}
+     */
+    public static <T> Preconfigured<Serializer<T>> asSerializer(final Preconfigured<? extends Serde<T>> preconfigured) {
+        return new Preconfigured<>((config, isKey) -> {
+            final Serde<T> serde = preconfigured.configurable.configure(config, isKey);
+            return serde.serializer();
+        });
     }
 
 }
