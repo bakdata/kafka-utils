@@ -29,7 +29,6 @@ import static java.util.Collections.emptyMap;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-import lombok.AccessLevel;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.apache.kafka.common.serialization.Deserializer;
@@ -40,12 +39,17 @@ import org.apache.kafka.common.serialization.Serializer;
  * A pre-configured {@link Serde} or {@link Serializer}, i.e., configs and isKey are set.
  * @param <T> type of underlying configurable
  */
-@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+@RequiredArgsConstructor
 public final class Preconfigured<T> {
     private final @NonNull Configurable<T> configurable;
     private final @NonNull Map<String, Object> configOverrides;
 
-    private Preconfigured(final Configurable<T> configurable) {
+    /**
+     * Create a new instance of {@code Preconfigured} with the given {@code Configurable} and no config overrides.
+     *
+     * @param configurable configurable to pre-configure
+     */
+    public Preconfigured(final Configurable<T> configurable) {
         this(configurable, emptyMap());
     }
 
