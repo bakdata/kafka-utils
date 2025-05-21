@@ -25,24 +25,46 @@
 package com.bakdata.kafka;
 
 import static com.bakdata.kafka.LoggingConfigurable.RECONFIGURATION_MESSAGE;
+import static com.bakdata.kafka.Preconfigured.deserializer;
+import static com.bakdata.kafka.Preconfigured.serializer;
 import static java.util.Collections.emptyMap;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
 
 import java.util.stream.Stream;
 import nl.altindag.log.LogCaptor;
+import org.apache.kafka.common.serialization.Deserializer;
+import org.apache.kafka.common.serialization.Serde;
 import org.apache.kafka.common.serialization.Serdes;
+import org.apache.kafka.common.serialization.Serializer;
+import org.apache.kafka.common.serialization.StringDeserializer;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 
+@ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.STRICT_STUBS)
 class PreconfiguredTest {
+
+    @Mock
+    private Serde<Object> serde;
+    @Mock
+    private Serializer<Object> serializer;
+    @Mock
+    private Deserializer<Object> deserializer;
 
     static Stream<Arguments> generatePreconfigured() {
         return Stream.of(
                 Arguments.of(Preconfigured.create(Serdes.String())),
-                Arguments.of(Preconfigured.create(new StringSerializer()))
+                Arguments.of(Preconfigured.create(new StringSerializer())),
+                Arguments.of(Preconfigured.create(new StringDeserializer()))
         );
     }
 
@@ -54,6 +76,25 @@ class PreconfiguredTest {
     @Test
     void shouldCreateDefaultSerializer() {
         assertThat(Preconfigured.defaultSerializer().configureForValues(emptyMap())).isNull();
+    }
+
+    @Test
+    void shouldCreateDefaultDeserializer() {
+        assertThat(Preconfigured.defaultDeserializer().configureForValues(emptyMap())).isNull();
+    }
+
+    @Test
+    void shouldConvertToSerializer() {
+        final Preconfigured<Serde<Object>> preconfigured = Preconfigured.create(this.serde);
+        when(this.serde.serializer()).thenReturn(this.serializer);
+        assertThat(serializer(preconfigured).configureForKeys(emptyMap())).isEqualTo(this.serializer);
+    }
+
+    @Test
+    void shouldConvertToDeserializer() {
+        final Preconfigured<Serde<Object>> preconfigured = Preconfigured.create(this.serde);
+        when(this.serde.deserializer()).thenReturn(this.deserializer);
+        assertThat(deserializer(preconfigured).configureForKeys(emptyMap())).isEqualTo(this.deserializer);
     }
 
     @ParameterizedTest
