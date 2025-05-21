@@ -171,7 +171,7 @@ public final class Preconfigured<T> {
     public static <T> Preconfigured<Deserializer<T>> deserializer(
             final Preconfigured<? extends Serde<T>> preconfigured) {
         return new Preconfigured<>((config, isKey) -> {
-            final Serde<T> serde = preconfigured.configurable.configure(config, isKey);
+            final Serde<T> serde = preconfigured.configure(config, isKey);
             return serde.deserializer();
         });
     }
@@ -185,7 +185,7 @@ public final class Preconfigured<T> {
      */
     public static <T> Preconfigured<Serializer<T>> serializer(final Preconfigured<? extends Serde<T>> preconfigured) {
         return new Preconfigured<>((config, isKey) -> {
-            final Serde<T> serde = preconfigured.configurable.configure(config, isKey);
+            final Serde<T> serde = preconfigured.configure(config, isKey);
             return serde.serializer();
         });
     }
