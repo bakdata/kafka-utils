@@ -168,7 +168,7 @@ public final class Preconfigured<T> {
      * @param <T> type (de-)serialized by the {@link Serde}
      * @return pre-configured {@link Deserializer} of the {@link Serde}
      */
-    public static <T> Preconfigured<Deserializer<T>> asDeserializer(
+    public static <T> Preconfigured<Deserializer<T>> deserializer(
             final Preconfigured<? extends Serde<T>> preconfigured) {
         return new Preconfigured<>((config, isKey) -> {
             final Serde<T> serde = preconfigured.configurable.configure(config, isKey);
@@ -183,7 +183,7 @@ public final class Preconfigured<T> {
      * @param <T> type (de-)serialized by the {@link Serde}
      * @return pre-configured {@link Serializer} of the {@link Serde}
      */
-    public static <T> Preconfigured<Serializer<T>> asSerializer(final Preconfigured<? extends Serde<T>> preconfigured) {
+    public static <T> Preconfigured<Serializer<T>> serializer(final Preconfigured<? extends Serde<T>> preconfigured) {
         return new Preconfigured<>((config, isKey) -> {
             final Serde<T> serde = preconfigured.configurable.configure(config, isKey);
             return serde.serializer();
