@@ -2,7 +2,7 @@
 kafka = "3.9.1"
 confluent = "7.9.1"
 junit = "5.12.2"
-mockito = "5.17.0"
+mockito = "5.18.0"
 
 [libraries]
 kafka-clients = { group = "org.apache.kafka", name = "kafka-clients", version.ref = "kafka" }
