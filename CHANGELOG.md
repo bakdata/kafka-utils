@@ -1,8 +1,26 @@
 # Change Log
 
-## [1.1.0](https://github.com/bakdata/kafka-utils/tree/1.1.0) (2025-03-19)
-[View commits](https://github.com/bakdata/kafka-utils/compare/1.1.0...1.1.0)
+## [1.1.1](https://github.com/bakdata/kafka-utils/tree/1.1.1) (2025-05-27)
+[View commits](https://github.com/bakdata/kafka-utils/compare/1.1.1...1.1.1)
 
+
+## [1.1.1](https://github.com/bakdata/kafka-utils/tree/1.1.1) (2025-05-27)
+[View commits](https://github.com/bakdata/kafka-utils/compare/1.1.0...1.1.1)
+
+**Merged pull requests:**
+
+- Upgrade to Kafka 3.9.1 [\#19](https://github.com/bakdata/kafka-utils/pull/19) ([@philipp94831](https://github.com/philipp94831))
+- Configure Dependabot [\#10](https://github.com/bakdata/kafka-utils/pull/10) ([@philipp94831](https://github.com/philipp94831))
+- Upgrade to Gradle 8.13 [\#9](https://github.com/bakdata/kafka-utils/pull/9) ([@philipp94831](https://github.com/philipp94831))
+- Migrate to version catalog [\#8](https://github.com/bakdata/kafka-utils/pull/8) ([@philipp94831](https://github.com/philipp94831))
+- Log reconfiguration of Serdes [\#7](https://github.com/bakdata/kafka-utils/pull/7) ([@philipp94831](https://github.com/philipp94831))
+
+**Upgraded dependencies:**
+
+- Bump io.github.hakky54:logcaptor from 2.10.1 to 2.11.0 [\#15](https://github.com/bakdata/kafka-utils/pull/15) ([@dependabot[bot]](https://github.com/apps/dependabot))
+- Bump the test\-dependencies group with 4 updates [\#13](https://github.com/bakdata/kafka-utils/pull/13) ([@dependabot[bot]](https://github.com/apps/dependabot))
+- Bump the plugins group with 3 updates [\#14](https://github.com/bakdata/kafka-utils/pull/14) ([@dependabot[bot]](https://github.com/apps/dependabot))
+- Bump bakdata/ci\-templates from 1.62.0 to 1.66.1 [\#11](https://github.com/bakdata/kafka-utils/pull/11) ([@dependabot[bot]](https://github.com/apps/dependabot))
 
 ## [1.1.0](https://github.com/bakdata/kafka-utils/tree/1.1.0) (2025-03-19)
 [View commits](https://github.com/bakdata/kafka-utils/compare/1.0.1...1.1.0)
