@@ -1,6 +1,6 @@
 [versions]
-kafka = "3.9.1"
-confluent = "7.9.1"
+kafka = "4.0.0"
+confluent = "8.0.0"
 junit = "5.12.2"
 mockito = "5.17.0"
 
