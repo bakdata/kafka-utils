@@ -110,6 +110,16 @@ class TopologyInformationTest {
     }
 
     @Test
+    void shouldReturnAllOutputTopics() {
+        final TopologyInformation topologyInformation =
+                new TopologyInformation(buildComplexTopology(), "id");
+        assertThat(topologyInformation.getOutputTopics(List.of()))
+                .hasSize(1)
+                .contains(OUTPUT_TOPIC)
+                .doesNotContain(THROUGH_TOPIC);
+    }
+
+    @Test
     void shouldReturnAllExternalSourceTopics() {
         final TopologyInformation topologyInformation =
                 new TopologyInformation(buildComplexTopology(), "id");

@@ -1,6 +1,6 @@
 [versions]
-kafka = "3.9.1"
-confluent = "7.9.1"
+kafka = "4.0.0"
+confluent = "8.0.0"
 junit = "5.12.2"
 mockito = "5.17.0"
 
@@ -43,5 +43,5 @@ logcaptor = { group = "io.github.hakky54", name = "logcaptor", version = "2.11.0
 [plugins]
 release = { id = "com.bakdata.release", version = "1.9.1" }
 sonar = { id = "com.bakdata.sonar", version = "1.9.1" }
-sonatype = { id = "com.bakdata.sonatype", version = "1.9.1" }
+sonatype = { id = "com.bakdata.sonatype", version = "1.10.0" }
 lombok = { id = "io.freefair.lombok", version = "8.13.1" }
