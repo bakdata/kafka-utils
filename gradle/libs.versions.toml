@@ -1,5 +1,5 @@
 [versions]
-kafka = "4.0.0"
+kafka = "8.0.0-ce"
 confluent = "8.0.0"
 junit = "5.12.2"
 mockito = "5.17.0"
