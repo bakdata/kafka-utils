@@ -1,8 +1,16 @@
 # Change Log
 
-## [1.1.1](https://github.com/bakdata/kafka-utils/tree/1.1.1) (2025-05-27)
-[View commits](https://github.com/bakdata/kafka-utils/compare/1.1.1...1.1.1)
+## [1.2.0](https://github.com/bakdata/kafka-utils/tree/1.2.0) (2025-06-23)
+[View commits](https://github.com/bakdata/kafka-utils/compare/1.2.0...1.2.0)
 
+
+## [1.2.0](https://github.com/bakdata/kafka-utils/tree/1.2.0) (2025-06-23)
+[View commits](https://github.com/bakdata/kafka-utils/compare/1.1.1...1.2.0)
+
+**Merged pull requests:**
+
+- Upgrade to Kafka 4.0 [\#6](https://github.com/bakdata/kafka-utils/pull/6) ([@philipp94831](https://github.com/philipp94831))
+- Support configuration of deserializers [\#17](https://github.com/bakdata/kafka-utils/pull/17) ([@philipp94831](https://github.com/philipp94831))
 
 ## [1.1.1](https://github.com/bakdata/kafka-utils/tree/1.1.1) (2025-05-27)
 [View commits](https://github.com/bakdata/kafka-utils/compare/1.1.0...1.1.1)
