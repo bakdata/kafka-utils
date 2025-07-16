@@ -3,7 +3,7 @@ updates:
   - package-ecosystem: "gradle"
     directory: "/"
     schedule:
-      interval: "daily"
+      interval: "monthly"
     groups:
       kafka-dependencies:
         patterns:
@@ -15,6 +15,7 @@ updates:
         patterns:
           - "org.slf4j*"
           - "org.apache.logging.log4j*"
+          - "*logcaptor*"
       test-dependencies:
         patterns:
           - "org.junit*"
@@ -23,6 +24,8 @@ updates:
           - "org.mockito*"
           - "org.testcontainers*"
           - "org.awaitility*"
+        exclude-patterns:
+          - "com.bakdata.fluent-kafka-streams-tests*"
       plugins:
         patterns:
           - "com.bakdata.release"
