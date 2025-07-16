@@ -10,6 +10,8 @@ dependencies {
         api(libs.kafka.core)
         api(libs.kafka.server)
         api(libs.kafka.server.common)
+        api(libs.kafka.test.common.runtime)
+        api(libs.kafka.group.coordinator)
         api(libs.kafka.streams)
         api(libs.kafka.streams.test.utils)
         api(libs.kafka.tools)
