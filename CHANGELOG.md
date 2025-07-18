@@ -1,8 +1,21 @@
 # Change Log
 
-## [1.2.0](https://github.com/bakdata/kafka-utils/tree/1.2.0) (2025-06-23)
-[View commits](https://github.com/bakdata/kafka-utils/compare/1.2.0...1.2.0)
+## [1.2.1](https://github.com/bakdata/kafka-utils/tree/1.2.1) (2025-07-18)
+[View commits](https://github.com/bakdata/kafka-utils/compare/1.2.1...1.2.1)
 
+
+## [1.2.1](https://github.com/bakdata/kafka-utils/tree/1.2.1) (2025-07-18)
+[View commits](https://github.com/bakdata/kafka-utils/compare/1.2.0...1.2.1)
+
+**Merged pull requests:**
+
+- Upgrade to Gradle 8.14 [\#29](https://github.com/bakdata/kafka-utils/pull/29) ([@philipp94831](https://github.com/philipp94831))
+- Add new modules for Kafka 4.0 [\#30](https://github.com/bakdata/kafka-utils/pull/30) ([@philipp94831](https://github.com/philipp94831))
+
+**Upgraded dependencies:**
+
+- Bump the plugins group across 1 directory with 2 updates [\#25](https://github.com/bakdata/kafka-utils/pull/25) ([@dependabot[bot]](https://github.com/apps/dependabot))
+- Bump the test\-dependencies group across 1 directory with 3 updates [\#21](https://github.com/bakdata/kafka-utils/pull/21) ([@dependabot[bot]](https://github.com/apps/dependabot))
 
 ## [1.2.0](https://github.com/bakdata/kafka-utils/tree/1.2.0) (2025-06-23)
 [View commits](https://github.com/bakdata/kafka-utils/compare/1.1.1...1.2.0)
