@@ -9,6 +9,8 @@ kafka-clients = { group = "org.apache.kafka", name = "kafka-clients", version.re
 kafka-core = { group = "org.apache.kafka", name = "kafka_2.13", version.ref = "kafka" }
 kafka-server = { group = "org.apache.kafka", name = "kafka-server", version.ref = "kafka" }
 kafka-server-common = { group = "org.apache.kafka", name = "kafka-server-common", version.ref = "kafka" }
+kafka-test-common-runtime = { group = "org.apache.kafka", name = "kafka-test-common-runtime", version.ref = "kafka" }
+kafka-group-coordinator = { group = "org.apache.kafka", name = "kafka-group-coordinator", version.ref = "kafka" }
 kafka-streams = { group = "org.apache.kafka", name = "kafka-streams", version.ref = "kafka" }
 kafka-streams-test-utils = { group = "org.apache.kafka", name = "kafka-streams-test-utils", version.ref = "kafka" }
 kafka-tools = { group = "org.apache.kafka", name = "kafka-tools", version.ref = "kafka" }
