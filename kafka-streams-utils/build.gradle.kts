@@ -17,4 +17,5 @@ dependencies {
     testImplementation(libs.mockito.core)
     testImplementation(libs.mockito.junit)
     testImplementation(libs.logcaptor)
+    testImplementation(group = "org.apache.kafka", name = "kafka-streams-test-utils")
 }
