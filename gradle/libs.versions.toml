@@ -46,4 +46,4 @@ logcaptor = { group = "io.github.hakky54", name = "logcaptor", version = "2.12.1
 release = { id = "com.bakdata.release", version = "1.11.1" }
 sonar = { id = "com.bakdata.sonar", version = "1.11.1" }
 sonatype = { id = "com.bakdata.sonatype", version = "1.11.1" }
-lombok = { id = "io.freefair.lombok", version = "8.14" }
+lombok = { id = "io.freefair.lombok", version = "9.0.0" }
