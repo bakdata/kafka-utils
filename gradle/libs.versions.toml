@@ -1,7 +1,7 @@
 [versions]
 kafka = "4.1.0"
 confluent = "8.1.0"
-junit = "5.14.0"
+junit = "5.14.1"
 mockito = "5.20.0"
 
 [libraries]
