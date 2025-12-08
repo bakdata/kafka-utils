@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.3.1](https://github.com/bakdata/kafka-utils/tree/1.3.1) - 2025-12-08
+### What's changed
+
+* Bump org.junit.jupiter:junit-jupiter from 5.14.0 to 5.14.1 in the test-dependencies group by @dependabot[bot] in [#45](https://github.com/bakdata/kafka-utils/pull/45)
+
+* Upgrade to Kafka 4.1.1 by @philipp94831 in [#51](https://github.com/bakdata/kafka-utils/pull/51)
+
+
+**Full Changelog**: https://github.com/bakdata/kafka-utils/compare/1.3.0...1.3.1
+
 ## [1.3.0](https://github.com/bakdata/kafka-utils/tree/1.3.0) - 2025-10-27
 ### What's changed
 
