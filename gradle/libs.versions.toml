@@ -43,7 +43,7 @@ mockito-junit = { group = "org.mockito", name = "mockito-junit-jupiter", version
 logcaptor = { group = "io.github.hakky54", name = "logcaptor", version = "2.12.1" }
 
 [plugins]
-release = { id = "com.bakdata.release", version = "2.0.1" }
-sonar = { id = "com.bakdata.sonar", version = "2.0.1" }
-sonatype = { id = "com.bakdata.sonatype", version = "2.0.1" }
+release = { id = "com.bakdata.release", version = "2.1.0" }
+sonar = { id = "com.bakdata.sonar", version = "2.1.0" }
+sonatype = { id = "com.bakdata.sonatype", version = "2.1.0" }
 lombok = { id = "io.freefair.lombok", version = "9.2.0" }
