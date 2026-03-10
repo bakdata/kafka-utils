@@ -2,6 +2,50 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.4.0](https://github.com/bakdata/kafka-utils/tree/1.4.0) - 2026-03-10
+### What's changed
+
+* Bump the test-dependencies group with 2 updates by @dependabot[bot] in [#52](https://github.com/bakdata/kafka-utils/pull/52)
+
+* Bump bakdata/ci-templates/.github/workflows/java-gradle-library.yaml from 1.70.0 to 1.70.2 by @dependabot[bot] in [#49](https://github.com/bakdata/kafka-utils/pull/49)
+
+* Bump bakdata/ci-templates/.github/workflows/java-gradle-release.yaml from 1.70.0 to 1.70.2 by @dependabot[bot] in [#50](https://github.com/bakdata/kafka-utils/pull/50)
+
+* Bump io.freefair.lombok from 8.14 to 9.1.0 by @dependabot[bot] in [#53](https://github.com/bakdata/kafka-utils/pull/53)
+
+* Upgrade to Gradle 9 by @philipp94831 in [#54](https://github.com/bakdata/kafka-utils/pull/54)
+
+* Update Dependabot config by @philipp94831 in [#55](https://github.com/bakdata/kafka-utils/pull/55)
+
+* Bump the ci-templates group with 2 updates by @dependabot[bot] in [#58](https://github.com/bakdata/kafka-utils/pull/58)
+
+* Bump the test-dependencies group with 2 updates by @dependabot[bot] in [#60](https://github.com/bakdata/kafka-utils/pull/60)
+
+* Bump the plugins group with 3 updates by @dependabot[bot] in [#61](https://github.com/bakdata/kafka-utils/pull/61)
+
+* Bump io.github.hakky54:logcaptor from 2.12.1 to 2.12.2 in the log-dependencies group by @dependabot[bot] in [#59](https://github.com/bakdata/kafka-utils/pull/59)
+
+* Bump gradle-wrapper from 9.3.0 to 9.3.1 by @dependabot[bot] in [#62](https://github.com/bakdata/kafka-utils/pull/62)
+
+* Bump the ci-templates group with 2 updates by @dependabot[bot] in [#63](https://github.com/bakdata/kafka-utils/pull/63)
+
+* Bump io.github.hakky54:logcaptor from 2.12.2 to 2.12.5 in the log-dependencies group by @dependabot[bot] in [#66](https://github.com/bakdata/kafka-utils/pull/66)
+
+* Bump the test-dependencies group with 3 updates by @dependabot[bot] in [#67](https://github.com/bakdata/kafka-utils/pull/67)
+
+* Bump the ci-templates group with 2 updates by @dependabot[bot] in [#64](https://github.com/bakdata/kafka-utils/pull/64)
+
+* Bump the ci-templates group with 2 updates by @dependabot[bot] in [#72](https://github.com/bakdata/kafka-utils/pull/72)
+
+* Bump the plugins group with 3 updates by @dependabot[bot] in [#70](https://github.com/bakdata/kafka-utils/pull/70)
+
+* Bump gradle-wrapper from 9.3.1 to 9.4.0 by @dependabot[bot] in [#71](https://github.com/bakdata/kafka-utils/pull/71)
+
+* Upgrade to Kafka 4.2 by @dependabot[bot] in [#69](https://github.com/bakdata/kafka-utils/pull/69)
+
+
+**Full Changelog**: https://github.com/bakdata/kafka-utils/compare/1.3.1...1.4.0
+
 ## [1.3.1](https://github.com/bakdata/kafka-utils/tree/1.3.1) - 2025-12-08
 ### What's changed
 
