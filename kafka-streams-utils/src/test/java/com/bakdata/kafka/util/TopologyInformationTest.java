@@ -24,9 +24,11 @@
 
 package com.bakdata.kafka.util;
 
+import static java.util.Collections.emptyMap;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.time.Duration;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -73,10 +75,16 @@ class TopologyInformationTest {
     }
 
     private static StreamsConfig createConfig(final String applicationId) {
-        return new StreamsConfig(Map.of(
+        return createConfig(applicationId, emptyMap());
+    }
+
+    private static StreamsConfig createConfig(final String applicationId, final Map<String, Object> additionalConfigs) {
+        final Map<String, Object> properties = new HashMap<>(Map.of(
                 StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092",
                 StreamsConfig.APPLICATION_ID_CONFIG, applicationId
         ));
+        properties.putAll(additionalConfigs);
+        return new StreamsConfig(properties);
     }
 
     @Test
@@ -316,13 +324,10 @@ class TopologyInformationTest {
     @Test
     void shouldSupportDlqTopic() {
         final String dlqTopic = "error";
-        final StreamsConfig config = new StreamsConfig(Map.of(
-                StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092",
-                StreamsConfig.APPLICATION_ID_CONFIG, "id",
-                StreamsConfig.ERRORS_DEAD_LETTER_QUEUE_TOPIC_NAME_CONFIG, dlqTopic
-        ));
         final TopologyInformation topologyInformation =
-                new TopologyInformation(buildComplexTopology(), config);
+                new TopologyInformation(buildComplexTopology(), createConfig("id", Map.of(
+                        StreamsConfig.ERRORS_DEAD_LETTER_QUEUE_TOPIC_NAME_CONFIG, dlqTopic
+                )));
         assertThat(topologyInformation.getExternalSinkTopics())
                 .containsExactly(THROUGH_TOPIC, OUTPUT_TOPIC, dlqTopic);
         assertThat(topologyInformation.getOutputTopics(List.of()))
