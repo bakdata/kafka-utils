@@ -24,14 +24,18 @@
 
 package com.bakdata.kafka.util;
 
+import static java.util.Collections.emptyMap;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.time.Duration;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.KeyValue;
 import org.apache.kafka.streams.StreamsBuilder;
+import org.apache.kafka.streams.StreamsConfig;
 import org.apache.kafka.streams.Topology;
 import org.apache.kafka.streams.kstream.GlobalKTable;
 import org.apache.kafka.streams.kstream.KStream;
@@ -70,10 +74,23 @@ class TopologyInformationTest {
         return builder.build();
     }
 
+    private static StreamsConfig createConfig(final String applicationId) {
+        return createConfig(applicationId, emptyMap());
+    }
+
+    private static StreamsConfig createConfig(final String applicationId, final Map<String, Object> additionalConfigs) {
+        final Map<String, Object> properties = new HashMap<>(Map.of(
+                StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092",
+                StreamsConfig.APPLICATION_ID_CONFIG, applicationId
+        ));
+        properties.putAll(additionalConfigs);
+        return new StreamsConfig(properties);
+    }
+
     @Test
     void shouldReturnAllExternalSinkTopics() {
         final TopologyInformation topologyInformation =
-                new TopologyInformation(buildComplexTopology(), "id");
+                new TopologyInformation(buildComplexTopology(), createConfig("id"));
         assertThat(topologyInformation.getExternalSinkTopics())
                 .containsExactly(THROUGH_TOPIC, OUTPUT_TOPIC);
     }
@@ -84,7 +101,7 @@ class TopologyInformationTest {
         streamsBuilder.stream("input")
                 .to((key, value, recordContext) -> "topic");
         final TopologyInformation topologyInformation =
-                new TopologyInformation(streamsBuilder.build(), "id");
+                new TopologyInformation(streamsBuilder.build(), createConfig("id"));
         assertThat(topologyInformation.getExternalSinkTopics())
                 .isEmpty();
     }
@@ -92,7 +109,7 @@ class TopologyInformationTest {
     @Test
     void shouldReturnAllInputTopics() {
         final TopologyInformation topologyInformation =
-                new TopologyInformation(buildComplexTopology(), "id");
+                new TopologyInformation(buildComplexTopology(), createConfig("id"));
         assertThat(topologyInformation.getInputTopics(List.of()))
                 .hasSize(2)
                 .containsAll(INPUT_TOPICS)
@@ -102,7 +119,7 @@ class TopologyInformationTest {
     @Test
     void shouldReturnAllIntermediateTopics() {
         final TopologyInformation topologyInformation =
-                new TopologyInformation(buildComplexTopology(), "id");
+                new TopologyInformation(buildComplexTopology(), createConfig("id"));
         assertThat(topologyInformation.getIntermediateTopics(List.of()))
                 .hasSize(1)
                 .containsExactly(THROUGH_TOPIC)
@@ -112,7 +129,7 @@ class TopologyInformationTest {
     @Test
     void shouldReturnAllOutputTopics() {
         final TopologyInformation topologyInformation =
-                new TopologyInformation(buildComplexTopology(), "id");
+                new TopologyInformation(buildComplexTopology(), createConfig("id"));
         assertThat(topologyInformation.getOutputTopics(List.of()))
                 .hasSize(1)
                 .contains(OUTPUT_TOPIC)
@@ -122,7 +139,7 @@ class TopologyInformationTest {
     @Test
     void shouldReturnAllExternalSourceTopics() {
         final TopologyInformation topologyInformation =
-                new TopologyInformation(buildComplexTopology(), "id");
+                new TopologyInformation(buildComplexTopology(), createConfig("id"));
         assertThat(topologyInformation.getExternalSourceTopics())
                 .hasSize(3)
                 .contains(THROUGH_TOPIC)
@@ -136,7 +153,7 @@ class TopologyInformationTest {
         final KStream<String, Object> stream = streamsBuilder.stream(pattern);
         stream.to("output");
         final TopologyInformation topologyInformation =
-                new TopologyInformation(streamsBuilder.build(), "id");
+                new TopologyInformation(streamsBuilder.build(), createConfig("id"));
         assertThat(topologyInformation.getExternalSourcePatterns())
                 .hasSize(1)
                 .contains(pattern);
@@ -150,7 +167,7 @@ class TopologyInformationTest {
                 .join(table, (v1, v2) -> v1, (v1, v2) -> v1)
                 .to("topic");
         final TopologyInformation topologyInformation =
-                new TopologyInformation(streamsBuilder.build(), "id");
+                new TopologyInformation(streamsBuilder.build(), createConfig("id"));
         assertThat(topologyInformation.getExternalSourceTopics())
                 .hasSize(2)
                 .containsExactlyInAnyOrder("input", "table");
@@ -170,7 +187,8 @@ class TopologyInformationTest {
                 .count(Materialized.as("counts"))
                 .toStream()
                 .to("output");
-        final TopologyInformation topologyInformation = new TopologyInformation(streamsBuilder.build(), "id");
+        final TopologyInformation topologyInformation =
+                new TopologyInformation(streamsBuilder.build(), createConfig("id"));
         assertThat(topologyInformation.getIntermediateTopics(List.of()))
                 .isEmpty();
         assertThat(topologyInformation.getInternalTopics())
@@ -183,7 +201,8 @@ class TopologyInformationTest {
         streamsBuilder.stream("input")
                 .repartition(Repartitioned.as("rep"))
                 .to("output");
-        final TopologyInformation topologyInformation = new TopologyInformation(streamsBuilder.build(), "id");
+        final TopologyInformation topologyInformation =
+                new TopologyInformation(streamsBuilder.build(), createConfig("id"));
         assertThat(topologyInformation.getIntermediateTopics(List.of()))
                 .isEmpty();
         assertThat(topologyInformation.getInternalTopics())
@@ -199,7 +218,8 @@ class TopologyInformationTest {
                 .to(throughTopic);
         streamsBuilder.stream(throughTopic)
                 .to("output");
-        final TopologyInformation topologyInformation = new TopologyInformation(streamsBuilder.build(), "id");
+        final TopologyInformation topologyInformation =
+                new TopologyInformation(streamsBuilder.build(), createConfig("id"));
         assertThat(topologyInformation.getIntermediateTopics(List.of()))
                 .hasSize(1)
                 .containsExactly("rep-repartition");
@@ -209,7 +229,7 @@ class TopologyInformationTest {
     @Test
     void shouldNotReturnInputTopics() {
         final TopologyInformation topologyInformation =
-                new TopologyInformation(buildComplexTopology(), "id");
+                new TopologyInformation(buildComplexTopology(), createConfig("id"));
         assertThat(topologyInformation.getExternalSinkTopics())
                 .doesNotContainAnyElementsOf(INPUT_TOPICS);
     }
@@ -217,7 +237,7 @@ class TopologyInformationTest {
     @Test
     void shouldReturnAllInternalTopics() {
         final TopologyInformation topologyInformation =
-                new TopologyInformation(buildComplexTopology(), "id");
+                new TopologyInformation(buildComplexTopology(), createConfig("id"));
         assertThat(topologyInformation.getInternalTopics())
                 .hasSize(3)
                 .allMatch(topic -> topic.contains("-KSTREAM-") && topic.startsWith("id")
@@ -234,7 +254,8 @@ class TopologyInformationTest {
                 .leftJoin(t2, ignored -> 1, (o1, o2) -> o1)
                 .toStream()
                 .to("output");
-        final TopologyInformation topologyInformation = new TopologyInformation(streamsBuilder.build(), "id");
+        final TopologyInformation topologyInformation =
+                new TopologyInformation(streamsBuilder.build(), createConfig("id"));
         assertThat(topologyInformation.getInternalTopics())
                 .contains(
                         "id-KTABLE-FK-JOIN-SUBSCRIPTION-REGISTRATION-0000000006-topic",
@@ -254,7 +275,8 @@ class TopologyInformationTest {
                 .leftJoin(t2, ignored -> 1, (o1, o2) -> o1, TableJoined.as("join"))
                 .toStream()
                 .to("output");
-        final TopologyInformation topologyInformation = new TopologyInformation(streamsBuilder.build(), "id");
+        final TopologyInformation topologyInformation =
+                new TopologyInformation(streamsBuilder.build(), createConfig("id"));
         assertThat(topologyInformation.getInternalTopics())
                 .contains(
                         "id-join-subscription-registration-topic",
@@ -270,7 +292,8 @@ class TopologyInformationTest {
         final StreamsBuilder streamsBuilder = new StreamsBuilder();
         final KStream<String, Object> stream = streamsBuilder.stream(Pattern.compile(".*-topic"));
         stream.to("output");
-        final TopologyInformation topologyInformation = new TopologyInformation(streamsBuilder.build(), "id");
+        final TopologyInformation topologyInformation =
+                new TopologyInformation(streamsBuilder.build(), createConfig("id"));
         assertThat(
                 topologyInformation.getInputTopics(List.of("foo", "foo-topic", "foo-topic-bar", "bar-topic")))
                 .hasSize(2)
@@ -285,7 +308,8 @@ class TopologyInformationTest {
         stream.to("through-topic");
         final KStream<String, Object> through = streamsBuilder.stream(Pattern.compile(".*-topic"));
         through.to("output");
-        final TopologyInformation topologyInformation = new TopologyInformation(streamsBuilder.build(), "id");
+        final TopologyInformation topologyInformation =
+                new TopologyInformation(streamsBuilder.build(), createConfig("id"));
         assertThat(topologyInformation.getIntermediateTopics(
                 List.of("foo", "foo-topic", "foo-topic-bar", "through-topic")))
                 .hasSize(1)
@@ -295,6 +319,21 @@ class TopologyInformationTest {
                 List.of("foo", "foo-topic", "foo-topic-bar", "through-topic")))
                 .hasSize(2)
                 .containsExactly("input", "foo-topic");
+    }
+
+    @Test
+    void shouldSupportDlqTopic() {
+        final String dlqTopic = "error";
+        final TopologyInformation topologyInformation =
+                new TopologyInformation(buildComplexTopology(), createConfig("id", Map.of(
+                        StreamsConfig.ERRORS_DEAD_LETTER_QUEUE_TOPIC_NAME_CONFIG, dlqTopic
+                )));
+        assertThat(topologyInformation.getExternalSinkTopics())
+                .containsExactly(THROUGH_TOPIC, OUTPUT_TOPIC, dlqTopic);
+        assertThat(topologyInformation.getOutputTopics(List.of()))
+                .hasSize(2)
+                .contains(OUTPUT_TOPIC, dlqTopic)
+                .doesNotContain(THROUGH_TOPIC);
     }
 
 }
