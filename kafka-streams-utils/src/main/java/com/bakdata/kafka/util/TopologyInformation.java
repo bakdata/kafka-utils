@@ -33,6 +33,7 @@ import java.util.function.Function;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import org.apache.kafka.streams.StreamsConfig;
 import org.apache.kafka.streams.Topology;
 import org.apache.kafka.streams.TopologyDescription;
 import org.apache.kafka.streams.TopologyDescription.GlobalStore;
@@ -62,6 +63,7 @@ public class TopologyInformation {
      */
     private static final Collection<String> PSEUDO_TOPIC_SUFFIXES = Set.of("-pk", "-fk", "-vh");
     private final String streamsId;
+    private final String dlqTopic;
     private final Collection<Node> nodes;
     private final Collection<GlobalStore> globalStores;
 
@@ -69,22 +71,23 @@ public class TopologyInformation {
      * Create a new TopologyInformation of a topology and the unique app id
      *
      * @param topology topology to extract nodes from
-     * @param streamsId unique app id to represent auto-created topics
+     * @param config streams config to infer auto-created topics
      */
-    public TopologyInformation(final Topology topology, final String streamsId) {
-        this(topology.describe(), streamsId);
+    public TopologyInformation(final Topology topology, final StreamsConfig config) {
+        this(topology.describe(), config);
     }
 
     /**
      * Create a new TopologyInformation of a topology and the unique app id
      *
      * @param description topology description to extract nodes from
-     * @param streamsId unique app id to represent auto-created topics
+     * @param config streams config to infer auto-created topics
      */
-    public TopologyInformation(final TopologyDescription description, final String streamsId) {
+    public TopologyInformation(final TopologyDescription description, final StreamsConfig config) {
         this.nodes = getNodes(description);
         this.globalStores = description.globalStores();
-        this.streamsId = streamsId;
+        this.streamsId = config.getString(StreamsConfig.APPLICATION_ID_CONFIG);
+        this.dlqTopic = config.getString(StreamsConfig.ERRORS_DEAD_LETTER_QUEUE_TOPIC_NAME_CONFIG);
     }
 
     private static List<Node> getNodes(final TopologyDescription description) {
@@ -347,7 +350,8 @@ public class TopologyInformation {
     }
 
     private Stream<String> getExternalSinkTopicsStream() {
-        return this.getSinkTopics()
-                .filter(this::isExternalTopic);
+        return Seq.seq(this.getSinkTopics())
+                .filter(this::isExternalTopic)
+                .concat(Optional.ofNullable(this.dlqTopic));
     }
 }
