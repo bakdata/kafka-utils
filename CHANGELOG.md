@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.5.0](https://github.com/bakdata/kafka-utils/tree/1.5.0) - 2026-04-15
+### What's changed
+
+* Setup multi-ecosystem Dependabot group by @philipp94831 in [#77](https://github.com/bakdata/kafka-utils/pull/77)
+
+* Bump the test-dependencies group across 1 directory with 2 updates by @dependabot[bot] in [#75](https://github.com/bakdata/kafka-utils/pull/75)
+
+* Bump io.github.hakky54:logcaptor from 2.12.5 to 2.12.6 in the log-dependencies group across 1 directory by @dependabot[bot] in [#74](https://github.com/bakdata/kafka-utils/pull/74)
+
+* Bump the "build" group with 1 update across multiple ecosystems by @dependabot[bot] in [#78](https://github.com/bakdata/kafka-utils/pull/78)
+
+* Add missing sonatype plugin to Dependabot multi-ecosystem group by @philipp94831 in [#79](https://github.com/bakdata/kafka-utils/pull/79)
+
+* Support Kafka Streams built-in dead letter queue by @philipp94831 in [#80](https://github.com/bakdata/kafka-utils/pull/80)
+
+
+**Full Changelog**: https://github.com/bakdata/kafka-utils/compare/1.4.0...1.5.0
+
 ## [1.4.0](https://github.com/bakdata/kafka-utils/tree/1.4.0) - 2026-03-10
 ### What's changed
 
