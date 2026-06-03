@@ -32,7 +32,7 @@ kafka-streams-jsonSchema-serde = { group = "io.confluent", name = "kafka-streams
 kafka-connect-avro-converter = { group = "io.confluent", name = "kafka-connect-avro-converter", version.ref = "confluent" }
 kafka-connect-protobuf-converter = { group = "io.confluent", name = "kafka-connect-protobuf-converter", version.ref = "confluent" }
 kafka-connect-jsonSchema-converter = { group = "io.confluent", name = "kafka-connect-json-schema-converter", version.ref = "confluent" }
-slf4j = { group = "org.slf4j", name = "slf4j-api", version = "2.0.17" }
+slf4j = { group = "org.slf4j", name = "slf4j-api", version = "2.0.18" }
 jool = { group = "org.jooq", name = "jool", version = "0.9.15" }
 
 junit-platform-launcher = { group = "org.junit.platform", name = "junit-platform-launcher" }
