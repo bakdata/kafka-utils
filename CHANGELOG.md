@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.6.0](https://github.com/bakdata/kafka-utils/tree/1.6.0) - 2026-06-23
+### What's changed
+
+* Bump the "build" group with 2 updates across multiple ecosystems by @dependabot[bot] in [#81](https://github.com/bakdata/kafka-utils/pull/81)
+
+* Bump org.junit.jupiter:junit-jupiter from 5.14.3 to 5.14.4 in the test-dependencies group by @dependabot[bot] in [#84](https://github.com/bakdata/kafka-utils/pull/84)
+
+* Bump org.slf4j:slf4j-api from 2.0.17 to 2.0.18 in the log-dependencies group by @dependabot[bot] in [#83](https://github.com/bakdata/kafka-utils/pull/83)
+
+* Bump the "build" group with 1 update across multiple ecosystems by @dependabot[bot] in [#85](https://github.com/bakdata/kafka-utils/pull/85)
+
+* Upgrade to Kafka 4.3 by @philipp94831 in [#86](https://github.com/bakdata/kafka-utils/pull/86)
+
+
+**Full Changelog**: https://github.com/bakdata/kafka-utils/compare/1.5.0...1.6.0
+
 ## [1.5.0](https://github.com/bakdata/kafka-utils/tree/1.5.0) - 2026-04-15
 ### What's changed
 
