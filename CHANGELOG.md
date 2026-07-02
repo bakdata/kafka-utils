@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.6.1](https://github.com/bakdata/kafka-utils/tree/1.6.1) - 2026-07-02
+### What's changed
+
+* Bump the kafka-dependencies group with 14 updates by @dependabot[bot] in [#87](https://github.com/bakdata/kafka-utils/pull/87)
+
+* Bump the "build" group with 2 updates across multiple ecosystems by @dependabot[bot] in [#88](https://github.com/bakdata/kafka-utils/pull/88)
+
+
+**Full Changelog**: https://github.com/bakdata/kafka-utils/compare/1.6.0...1.6.1
+
 ## [1.6.0](https://github.com/bakdata/kafka-utils/tree/1.6.0) - 2026-06-23
 ### What's changed
 
