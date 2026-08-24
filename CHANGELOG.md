@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.0.0](https://github.com/bakdata/kafka-utils/tree/2.0.0) - 2026-08-24
+### What's changed
+
+* Bump the "build" group with 1 update across multiple ecosystems by @dependabot[bot] in [#89](https://github.com/bakdata/kafka-utils/pull/89)
+
+* Bump the build group with 4 updates by @dependabot[bot] in [#90](https://github.com/bakdata/kafka-utils/pull/90)
+
+* Upgrade to Java 17 by @philipp94831 in [#92](https://github.com/bakdata/kafka-utils/pull/92)
+
+* Upgrade to Confluent 8.3.1 by @philipp94831 in [#93](https://github.com/bakdata/kafka-utils/pull/93)
+
+* Bump org.junit.jupiter:junit-jupiter from 5.14.4 to 6.1.3 by @dependabot[bot] in [#91](https://github.com/bakdata/kafka-utils/pull/91)
+
+
+**Full Changelog**: https://github.com/bakdata/kafka-utils/compare/1.6.1...2.0.0
+
 ## [1.6.1](https://github.com/bakdata/kafka-utils/tree/1.6.1) - 2026-07-02
 ### What's changed
 
