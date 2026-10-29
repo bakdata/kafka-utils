@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.0.1](https://github.com/bakdata/kafka-utils/tree/2.0.1) - 2026-10-28
+### What's changed
+
+* Bump the "build" group with 1 update across multiple ecosystems by @dependabot[bot] in [#94](https://github.com/bakdata/kafka-utils/pull/94)
+
+* Bump the test-dependencies group with 2 updates by @dependabot[bot] in [#96](https://github.com/bakdata/kafka-utils/pull/96)
+
+* Bump the log-dependencies group with 2 updates by @dependabot[bot] in [#95](https://github.com/bakdata/kafka-utils/pull/95)
+
+* Upgrade to Kafka 4.3.2 and Confluent 8.3.2 by @philipp94831 in [#97](https://github.com/bakdata/kafka-utils/pull/97)
+
+* Bump io.github.hakky54:logcaptor from 2.12.7 to 2.13.0 in the log-dependencies group by @dependabot[bot] in [#103](https://github.com/bakdata/kafka-utils/pull/103)
+
+* Bump the build group with 2 updates by @dependabot[bot] in [#99](https://github.com/bakdata/kafka-utils/pull/99)
+
+* Bump the build group with 2 updates by @dependabot[bot] in [#98](https://github.com/bakdata/kafka-utils/pull/98)
+
+
+**Full Changelog**: https://github.com/bakdata/kafka-utils/compare/2.0.0...2.0.1
+
 ## [2.0.0](https://github.com/bakdata/kafka-utils/tree/2.0.0) - 2026-08-24
 ### What's changed
 
